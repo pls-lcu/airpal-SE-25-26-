@@ -1,0 +1,39 @@
+@startuml UC_Commerce_Logistics
+
+left to right direction
+title Commerce & Logistics Domain
+
+' Actor generalization hierarchy
+actor "Authenticated User" as Auth
+actor "Passenger" as Passenger
+actor "Airline Pricing Engine" as PricingEngine
+
+Passenger -|> Auth
+
+rectangle "Commerce & Logistics Domain" {
+  usecase "Flight Search" as UC06
+  usecase "Ticket Booking" as UC07
+  usecase "Manage Booking" as UC08
+  usecase "Online Check-in" as UC09
+  usecase "Gate Finder" as UC10
+  usecase "Baggage Carousel Finder" as UC11
+  usecase "Contact Customer Support" as UC17
+  usecase "Cargo Booking" as UC13
+  usecase "Report Lost Items" as UC14
+  usecase "Update Ticket Pricing" as UC19
+  usecase "Update Cargo Pricing" as UC20
+}
+
+Passenger --> UC06
+Passenger --> UC07
+Passenger --> UC08
+Passenger --> UC09
+Passenger --> UC10
+Passenger --> UC11
+Auth --> UC17
+Auth --> UC14
+Auth --> UC13
+PricingEngine --> UC19
+PricingEngine --> UC20
+
+@enduml

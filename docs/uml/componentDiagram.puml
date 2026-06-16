@@ -1,0 +1,65 @@
+@startuml AirPal_ComponentDiagram
+
+skinparam componentStyle uml2
+skinparam packageStyle rectangle
+
+' ─────────────────────────────────────────
+' CLIENT LAYER
+' ─────────────────────────────────────────
+package "Client Layer" {
+  [Web / Mobile Frontend] as Frontend
+}
+
+' ─────────────────────────────────────────
+' APPLICATION CORE (AirPal System)
+' ─────────────────────────────────────────
+package "AirPal System" {
+
+  [API Gateway] as Gateway
+
+  ' One service component per domain, mirroring the class diagram packages
+  [Identity & Access Service] as IdentityService
+  [Commerce & Logistics Service] as CommerceService
+  [Aviation Operations Service] as AviationService
+  [Monitoring & Feedback Service] as MonitoringService
+
+  database "Airport Database" as DB
+}
+
+' ─────────────────────────────────────────
+' EXTERNAL SYSTEMS
+' ─────────────────────────────────────────
+package "External Systems" {
+  [Payment Gateway] as PaymentGW
+  [Email Provider] as EmailProvider
+  [Airline Flight Scheduling Engine] as SchedulingEngine
+  [Airline Pricing Engine] as PricingEngine
+  [Weather API Provider] as WeatherAPI
+  [In-house Weather Station] as WeatherStation
+}
+
+' ─────────────────────────────────────────
+' INTERFACES (provided/required)
+' ─────────────────────────────────────────
+Frontend --> Gateway : HTTPS / REST
+
+Gateway --> IdentityService
+Gateway --> CommerceService
+Gateway --> AviationService
+Gateway --> MonitoringService
+
+IdentityService --> DB
+CommerceService --> DB
+AviationService --> DB
+MonitoringService --> DB
+
+' External integrations
+IdentityService --> EmailProvider : verification / reset emails
+CommerceService --> PaymentGW : process payments
+CommerceService --> EmailProvider : booking / boarding confirmations
+AviationService --> SchedulingEngine : receive flight schedules
+AviationService --> PricingEngine : receive pricing updates
+MonitoringService --> WeatherAPI : regional weather data
+MonitoringService --> WeatherStation : local weather data
+
+@enduml

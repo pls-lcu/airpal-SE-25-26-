@@ -1,0 +1,38 @@
+@startuml UC_Monitoring_System_Feedback
+
+left to right direction
+title Monitoring & System Feedback
+
+' Actor generalization hierarchy
+actor "Authenticated User" as Auth
+actor "Passenger" as Passenger
+actor "Ground Manager" as GM
+actor "Airport Administrator" as AirportAdmin
+actor "System Administrator" as SysAdmin
+actor "Weather Provider" as WeatherProvider
+actor "In-house Weather Station" as WeatherStation
+
+Passenger -|> Auth
+GM -|> Auth
+AirportAdmin -|> Auth
+SysAdmin -|> Auth
+
+rectangle "Monitoring & System Feedback" {
+  usecase "Report a Bug" as UC16
+  usecase "Report Lost Items" as UC14
+  usecase "Request Additional Assistance" as UC15
+  usecase "Customer Support" as UC17
+  usecase "Update Weather Information" as UC27
+}
+
+Auth --> UC16
+Passenger --> UC14
+Passenger --> UC15
+AirportAdmin --> UC17
+GM --> UC14
+GM --> UC15
+SysAdmin --> UC27
+WeatherProvider --> UC27
+WeatherStation --> UC27
+
+@enduml

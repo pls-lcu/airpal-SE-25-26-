@@ -1,0 +1,222 @@
+@startuml AirPal_ClassDiagram
+
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+hide circle
+
+' ─────────────────────────────────────────
+' ROOT
+' ─────────────────────────────────────────
+class AirPal {
+  + airportName : String
+  + icaoCode : String
+  + run()
+}
+
+' ─────────────────────────────────────────
+' DOMAIN: Identity_Access_Management
+' ─────────────────────────────────────────
+package "Identity_Access_Management" {
+
+  abstract class User {
+    # username : String
+    # name : String
+    # surname : String
+    # email : String
+    # password : String
+    + login()
+    + logout()
+    + resetPassword()
+    + deleteAccount()
+  }
+
+  class Passenger {
+    + passportNo : String
+    + register()
+    + accessDashboard()
+  }
+
+  abstract class AirportStaff {
+    # employeeID : String
+    # role : String
+    + performAssignedTask()
+  }
+
+  abstract class AirlineStaff {
+    # employeeID : String
+    # role : String
+    + performAssignedTask()
+  }
+
+  class SystemAdministrator {
+    + createWorkerAccount()
+    + receiveBugReport()
+  }
+
+  class AirportAdministrator {
+    + updateSchedule()
+    + receiveCustomerSupportTicket()
+  }
+
+  class GroundManager {
+    + receiveLostItemReport()
+    + receiveAssistanceRequest()
+    + assignStaff()
+  }
+
+  class GroundStaff {
+    + performAssignedTask()
+  }
+
+  class AirlineManager {
+    + submitFlightSchedule()
+    + assignCrew()
+  }
+
+  class FlightCrew {
+    + performAssignedTask()
+  }
+
+  User <|-- Passenger
+  User <|-- AirportStaff
+  User <|-- AirlineStaff
+  AirportStaff <|-- SystemAdministrator
+  AirportStaff <|-- AirportAdministrator
+  AirportStaff <|-- GroundManager
+  AirportStaff <|-- GroundStaff
+  AirlineStaff <|-- AirlineManager
+  AirlineStaff <|-- FlightCrew
+}
+
+' ─────────────────────────────────────────
+' DOMAIN: Aviation_Ops_Domain
+' ─────────────────────────────────────────
+package "Aviation_Ops_Domain" {
+
+  class Flight {
+    + flightNo : String
+    + origin : String
+    + destination : String
+    + departureTime : DateTime
+    + arrivalTime : DateTime
+    + type : String
+    + search()
+    + updateStatus()
+    + assignGate()
+    + assignCrew()
+  }
+
+  class Schedule {
+    + status : String
+    + updateStatus()
+    + compareWithNewSchedule()
+  }
+
+  class Aircraft {
+    + tailNumber : String
+    + updateStatus()
+  }
+
+  class Gate {
+    + gateID : String
+    + terminal : String
+    + assignToFlight()
+  }
+
+  Flight "1" *-- "1" Schedule
+  Flight "1" o-- "0..1" Aircraft
+  Flight "1" o-- "0..1" Gate
+}
+
+' ─────────────────────────────────────────
+' DOMAIN: Commerce_Logistics_Domain
+' ─────────────────────────────────────────
+package "Commerce_Logistics_Domain" {
+
+  class Booking {
+    + bookingRef : String
+    + totalPrice : Float
+    + status : String
+    + create()
+    + modify()
+    + cancel()
+  }
+
+  class Ticket {
+    + seatNumber : String
+    + generateBoardingPass()
+    + checkIn()
+  }
+
+  class CargoShipment {
+    + shipmentID : String
+    + weight : Float
+    + create()
+    + updatePricing()
+  }
+
+  class Baggage {
+    + tagID : String
+    + findCarousel()
+  }
+
+  Booking "1" *-- "0..*" Ticket
+  Booking "1" *-- "0..*" CargoShipment
+  Ticket "1" *-- "0..*" Baggage
+}
+
+' ─────────────────────────────────────────
+' DOMAIN: Monitoring_Boundaries
+' ─────────────────────────────────────────
+package "Monitoring_Boundaries" {
+
+  class BugReport {
+    + bugID : String
+    + description : String
+    + create()
+  }
+
+  class CustomerSupportTicket {
+    + ticketID : String
+    + description : String
+    + create()
+  }
+
+  class AssistanceRequest {
+    + requestID : String
+    + type : String
+    + create()
+  }
+
+  class LostItemReport {
+    + reportID : String
+    + description : String
+    + create()
+  }
+
+  class WeatherData {
+    + localConditions : String
+    + regionalConditions : String
+    + update()
+    + notifyIfCritical()
+  }
+}
+
+' ─────────────────────────────────────────
+' CROSS-DOMAIN ASSOCIATIONS
+' ─────────────────────────────────────────
+AirPal "1" o-- "0..*" Flight
+AirPal "1" o-- "0..*" Booking
+
+Passenger "1" -- "0..*" Booking : places >
+FlightCrew "0..*" -- "0..*" Flight : assignedCrew >
+
+SystemAdministrator "1" -- "0..*" BugReport : manages >
+AirportAdministrator "1" -- "0..*" CustomerSupportTicket : handles >
+GroundManager "1" -- "0..*" LostItemReport : handles >
+GroundManager "1" -- "0..*" AssistanceRequest : handles >
+AirportAdministrator "1" -- "1" WeatherData : monitors >
+
+Booking "0..*" -- "1" Flight : for >
+
+@enduml

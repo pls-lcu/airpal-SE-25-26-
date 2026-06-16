@@ -1,0 +1,38 @@
+@startuml UC_Identity_Access_Management
+
+left to right direction
+title Identity & Access Management
+
+' Actor generalization hierarchy
+actor "Unauthenticated User" as Unauth
+actor "Authenticated User" as Auth
+actor "System Administrator" as SysAdmin
+actor "Ground Manager" as GM
+actor "Airport Administrator" as AirportAdmin
+
+Unauth -|> Auth
+SysAdmin -|> Auth
+GM -|> Auth
+AirportAdmin -|> Auth
+
+rectangle "Identity & Access Management" {
+  usecase "User Registration" as UC01
+  usecase "Login" as UC02
+  usecase "Logout" as UC03
+  usecase "Password Reset" as UC04
+  usecase "Account Deletion" as UC05
+  usecase "Access Dashboard" as UC12
+  usecase "Create Worker Accounts" as UC25
+  usecase "Ground Staff Shift Assignment" as UC24
+}
+
+Unauth --> UC01
+Unauth --> UC02
+Auth --> UC03
+Auth --> UC04
+Auth --> UC05
+Auth --> UC12
+SysAdmin --> UC25
+GM --> UC24
+
+@enduml

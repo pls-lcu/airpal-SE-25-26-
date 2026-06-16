@@ -1,0 +1,42 @@
+@startuml UC_Airport_Operations_Management
+
+left to right direction
+title Airport Operations Management
+
+' Actor generalization hierarchy
+actor "Authenticated User" as Auth
+actor "Ground Manager" as GM
+actor "Airline Manager" as AirlineManager
+actor "Airport Administrator" as AirportAdmin
+actor "Ground Staff" as GS
+actor "Airline Flight Scheduling Engine" as SchedulingEngine
+actor "Airline Pricing Engine" as PricingEngine
+
+GM -|> Auth
+AirlineManager -|> Auth
+AirportAdmin -|> Auth
+GS -|> Auth
+
+rectangle "Airport Operations Management" {
+  usecase "Update Aircraft Status" as UC26
+  usecase "Ground Staff Shift Assignment" as UC24
+  usecase "Gate Assignment" as UC22
+  usecase "Flight Scheduling" as UC18
+  usecase "Schedule Management" as UC23
+  usecase "Assign Flight Crews" as UC21
+  usecase "Update Ticket Pricing" as UC19
+  usecase "Update Cargo Pricing" as UC20
+}
+
+GM --> UC26
+GM --> UC24
+GM --> UC22
+AirlineManager --> UC18
+AirlineManager --> UC21
+AirportAdmin --> UC23
+SchedulingEngine --> UC18
+PricingEngine --> UC19
+PricingEngine --> UC20
+GS --> UC24
+
+@enduml
