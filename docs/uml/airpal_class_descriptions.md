@@ -55,7 +55,7 @@ Abstract base for all employees working for an airline rather than the airport. 
 ---
 
 ### `AirportAdministrator` *(extends AirportStaff)*
-Oversees airport-level operations including schedules, customer support, user management, and system feedback.
+Manages airport-level operations and technical administration, including flight schedules, customer support, user accounts, and system oversight.
 
 | Element | Detail |
 |---|---|
