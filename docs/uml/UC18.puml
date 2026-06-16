@@ -1,0 +1,27 @@
+@startuml UC18_SubmitFlightSchedule_Revised
+autonumber
+
+actor "Airline Manager" as AirlineManager
+actor "Airline Flight Scheduling Engine" as SchedulingEngine
+participant "System" as Sys
+database "Airport Database" as DB
+actor "Airport Administrator" as AirportAdministrator
+actor "Ground Manager" as GroundManager
+
+SchedulingEngine -> AirlineManager : Send flight schedule data
+AirlineManager -> Sys : Submit flight schedule
+Sys -> DB : Retrieve existing airport schedule
+DB --> Sys : Existing schedule
+Sys -> Sys : Compare schedules
+
+alt Schedules compatible
+    Sys -> DB : Add new schedule
+    DB --> Sys : Schedule stored
+    Sys -> AirportAdministrator : Notify new schedule
+    Sys -> GroundManager : Notify new schedule
+    Sys -> AirlineManager : Display success message
+else Incompatible schedules
+    Sys -> AirlineManager : Display error / Request new schedule generation
+end
+
+@enduml

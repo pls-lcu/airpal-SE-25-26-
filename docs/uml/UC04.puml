@@ -1,0 +1,48 @@
+@startuml UC04_ResetPassword_Revised
+autonumber
+
+actor "Authenticated User" as AuthUser
+actor "Unauthenticated User" as UnauthUser
+participant "System" as Sys
+database "User Database" as DB
+participant "Email Provider" as EmailProvider
+
+alt User is authenticated
+    AuthUser -> Sys : Click "Reset password"
+    Sys -> EmailProvider : Send password reset link
+    EmailProvider --> Sys : Link sent
+    AuthUser -> Sys : Access link
+    Sys -> AuthUser : Ask for new password
+    AuthUser -> Sys : Enter new password
+    Sys -> DB : Save new password
+    DB --> Sys : Password saved
+    Sys -> AuthUser : Redirect to login page
+else User is not authenticated
+    UnauthUser -> Sys : Click "Reset password"
+    Sys -> UnauthUser : Ask for email address
+    UnauthUser -> Sys : Enter email
+    Sys -> DB : Search account by email
+    DB --> Sys : Account found / not found
+
+    alt Invalid email
+        Sys -> UnauthUser : Show error (invalid email)
+        UnauthUser -> Sys : Re-enter email
+    else No database access
+        Sys -> UnauthUser : Show error
+        UnauthUser -> Sys : Retry
+    else Account not found
+        Sys -> UnauthUser : Show error
+        UnauthUser -> Sys : Retry
+    else Valid email
+        Sys -> EmailProvider : Send password reset link
+        EmailProvider --> Sys : Link sent
+        UnauthUser -> Sys : Access link
+        Sys -> UnauthUser : Ask for new password
+        UnauthUser -> Sys : Enter new password
+        Sys -> DB : Save new password
+        DB --> Sys : Password saved
+        Sys -> UnauthUser : Redirect to login page
+    end
+end
+
+@enduml

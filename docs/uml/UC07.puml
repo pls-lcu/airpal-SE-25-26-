@@ -1,0 +1,25 @@
+@startuml UC07_BookFlight
+autonumber
+
+actor "Passenger" as Passenger
+participant "System" as Sys
+database "Airport Database" as DB
+participant "PaymentGateway" as PaymentGateway
+participant "EmailProvider" as EmailProvider
+
+Passenger -> Sys : Click "Book now" / Enter number of tickets
+Sys -> Passenger : Ask passenger details, seating and luggage info
+Passenger -> Sys : Submit all passenger details
+Sys -> DB : Calculate final cost
+DB --> Sys : Cost calculated
+Sys -> Passenger : Ask for payment information
+Passenger -> Sys : Submit payment information
+Sys -> PaymentGateway : Process payment
+PaymentGateway --> Sys : Payment approved
+Sys -> DB : Reserve tickets / Create booking reference
+Sys -> DB : Update passenger capacity
+Sys -> EmailProvider : Send confirmation email
+EmailProvider --> Sys : Email sent
+Sys -> Passenger : Display success message with booking reference
+
+@enduml

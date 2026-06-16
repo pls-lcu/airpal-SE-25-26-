@@ -1,0 +1,26 @@
+@startuml UC17_GetAssistance
+autonumber
+
+actor "Passenger" as Passenger
+participant "System" as Sys
+database "Airport Database" as DB
+actor "Airport Administrator" as AirportAdministrator
+actor "Ground Manager" as GroundManager
+
+Passenger -> Sys : Access "Assistance" section
+Sys -> Passenger : Display FAQ list
+Passenger -> Sys : Contact customer support
+Sys -> Passenger : Request issue details (System vs Airport)
+Passenger -> Sys : Submit issue information
+
+alt Issue about the system
+    Sys -> Passenger : Redirect to UC16 (Report a Bug)
+else Issue about the airport
+    Sys -> DB : Create support ticket
+    DB --> Sys : Ticket saved
+    Sys -> AirportAdministrator : Notify support ticket
+    Sys -> GroundManager : Notify support ticket
+    Sys -> Passenger : Display confirmation message
+end
+
+@enduml

@@ -1,0 +1,27 @@
+@startuml UC25_UserManagement
+autonumber
+
+actor "System Administrator" as SystemAdministrator
+participant "System" as Sys
+database "Airport Database" as DB
+actor "Airport Administrator" as AirportAdministrator
+participant "EmailProvider" as EmailProvider
+
+SystemAdministrator -> Sys : Access user management
+Sys -> SystemAdministrator : Display account creation form
+SystemAdministrator -> Sys : Submit worker info and selected role
+Sys -> DB : Validate email and role
+DB --> Sys : Validation result
+
+alt Email already exists
+    Sys -> SystemAdministrator : Show error "Email already in use"
+else Validation successful
+    Sys -> DB : Save new user account
+    DB --> Sys : Account saved
+    Sys -> EmailProvider : Send access instructions
+    EmailProvider --> Sys : Email sent
+    Sys -> AirportAdministrator : Notify account created
+    Sys -> SystemAdministrator : Display success confirmation
+end
+
+@enduml

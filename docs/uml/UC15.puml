@@ -1,0 +1,17 @@
+@startuml UC15_RequestAssistance
+autonumber
+
+actor "Passenger" as Passenger
+participant "System" as Sys
+actor "Ground Manager" as GroundManager
+actor "Ground Staff" as GroundStaff
+
+Passenger -> Sys : Request additional assistance
+Sys -> Passenger : Ask to specify needs
+Passenger -> Sys : Submit assistance details
+Sys -> GroundManager : Notify assistance request
+GroundManager -> GroundStaff : Assign assistance task
+Sys -> GroundStaff : Notify task details
+Sys -> Passenger : Display confirmation message
+
+@enduml

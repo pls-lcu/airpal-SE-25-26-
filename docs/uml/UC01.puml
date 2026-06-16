@@ -1,0 +1,32 @@
+@startuml UC01_Register
+autonumber
+
+actor "Unauthenticated User" as UnauthUser
+participant "System" as Sys
+database "User Database" as DB
+participant "Email Provider" as EmailProvider
+
+UnauthUser -> Sys : Click "Register"
+Sys -> UnauthUser : Show registration form
+UnauthUser -> Sys : Submit details (email, nickname, password)
+Sys -> DB : Check uniqueness (email, nickname)
+DB --> Sys : Unique / Duplicate
+
+alt Duplicate account (4b)
+    Sys -> UnauthUser : Show "Nickname or email already in use"
+    UnauthUser -> Sys : Re-enter information
+    Sys -> DB : Check uniqueness again
+else Valid information
+    Sys -> DB : Create inactive account
+    DB --> Sys : Account created (inactive)
+    Sys -> EmailProvider : Send verification link
+    EmailProvider --> Sys : Link sent
+    Sys -> UnauthUser : Display "Verify your email address"
+    UnauthUser -> Sys : Verify email address
+    Sys -> DB : Activate account
+    DB --> Sys : Account activated
+    Sys -> UnauthUser : Display success message
+    Sys -> UnauthUser : Auto-login
+end
+
+@enduml

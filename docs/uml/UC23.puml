@@ -1,0 +1,32 @@
+@startuml UC23_ScheduleManagement
+autonumber
+
+actor "Airport Administrator" as AirportAdministrator
+participant "System" as Sys
+database "Airport Database" as DB
+actor "Ground Manager" as GroundManager
+actor "Airline Manager" as AirlineManager
+actor "Airline Flight Scheduling Engine" as SchedulingEngine
+
+AirportAdministrator -> Sys : Access schedule management
+Sys -> DB : Retrieve scheduled flights
+DB --> Sys : Flight list
+Sys -> AirportAdministrator : Display schedule
+AirportAdministrator -> Sys : Select flight / Submit new schedule info
+Sys -> Sys : Validate update information
+
+alt Cancellation
+    Sys -> DB : Mark flight as cancelled
+    Sys -> SchedulingEngine : Send cancellation alerts
+    SchedulingEngine --> Sys : Alerts sent
+else Delay or schedule change
+    Sys -> DB : Save updated schedule
+end
+
+DB --> Sys : Update success
+Sys -> GroundManager : Notify schedule change
+Sys -> AirlineManager : Notify schedule change
+Sys -> SchedulingEngine : Sync updated timing
+Sys -> AirportAdministrator : Display success confirmation
+
+@enduml

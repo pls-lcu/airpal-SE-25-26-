@@ -1,0 +1,19 @@
+@startuml UC09_CheckIn
+autonumber
+
+actor "Passenger" as Passenger
+participant "System" as Sys
+database "Airport Database" as DB
+participant "EmailProvider" as EmailProvider
+
+Passenger -> Sys : Access personal area / Select eligible booking
+Passenger -> Sys : Click "Check-in"
+Passenger -> Sys : Verify passenger & luggage details / Confirm check-in
+Sys -> Sys : Generate digital boarding pass
+Sys -> EmailProvider : Send boarding pass to passenger
+EmailProvider --> Sys : Email sent
+Sys -> Passenger : Display "Download" option
+Passenger -> Sys : Click "Download"
+Sys -> Passenger : Provide digital boarding pass file
+
+@enduml

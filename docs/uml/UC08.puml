@@ -1,0 +1,31 @@
+@startuml UC08_ModifyBooking
+autonumber
+
+actor "Passenger" as Passenger
+participant "System" as Sys
+database "Airport Database" as DB
+participant "PaymentGateway" as PaymentGateway
+participant "EmailProvider" as EmailProvider
+
+Passenger -> Sys : Access active bookings
+Sys -> DB : Retrieve active bookings
+DB --> Sys : Booking list
+Sys -> Passenger : Display active bookings
+Passenger -> Sys : Select booking
+Sys -> DB : Get booking details
+DB --> Sys : Booking details
+Passenger -> Sys : Submit modifications (seating, luggage, etc.)
+
+alt Fees or refund required
+    Sys -> Passenger : Request payment information
+    Passenger -> Sys : Provide payment information
+    Sys -> PaymentGateway : Process transaction
+    PaymentGateway --> Sys : Transaction approved
+end
+
+Sys -> DB : Save updated booking
+Sys -> Passenger : Display success message
+Sys -> EmailProvider : Send confirmation email
+EmailProvider --> Sys : Confirmation sent
+
+@enduml

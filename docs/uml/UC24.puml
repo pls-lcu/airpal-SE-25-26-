@@ -1,0 +1,26 @@
+@startuml UC24_StaffManagement
+autonumber
+
+actor "Ground Manager" as GroundManager
+participant "System" as Sys
+database "Airport Database" as DB
+actor "Ground Staff" as GroundStaff
+
+GroundManager -> Sys : Access staff management
+Sys -> DB : Retrieve ground staff list
+DB --> Sys : Staff list
+Sys -> GroundManager : Display staff members
+GroundManager -> Sys : Select staff / Enter shift details
+Sys -> DB : Check staff availability
+DB --> Sys : Availability result
+
+alt Staff available
+    Sys -> DB : Save shift assignment
+    DB --> Sys : Assignment confirmed
+    Sys -> GroundStaff : Notify updated shift
+    Sys -> GroundManager : Display success confirmation
+else Staff unavailable
+    Sys -> GroundManager : Show warning "Staff member already assigned"
+end
+
+@enduml

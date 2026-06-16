@@ -1,0 +1,32 @@
+@startuml UC22_AssignGate
+autonumber
+
+actor "Ground Manager" as GroundManager
+participant "System" as Sys
+database "Airport Database" as DB
+actor "Ground Staff" as GroundStaff
+actor "Airline Flight Scheduling Engine" as SchedulingEngine
+
+GroundManager -> Sys : Access "Flight schedule" section
+Sys -> DB : Retrieve scheduled flights
+DB --> Sys : Flight list
+Sys -> GroundManager : Display scheduled flights
+GroundManager -> Sys : Select flight / Click "Assign gate"
+Sys -> DB : Retrieve available gates
+DB --> Sys : Gate list
+Sys -> GroundManager : Display available gates
+GroundManager -> Sys : Select gate
+Sys -> DB : Check gate availability
+DB --> Sys : Gate available
+
+alt Gate available
+    Sys -> DB : Save gate assignment
+    DB --> Sys : Assignment saved
+    Sys -> GroundStaff : Notify updated gate info
+    Sys -> SchedulingEngine : Notify gate assignment
+    Sys -> GroundManager : Display success message
+else Gate occupied
+    Sys -> GroundManager : Show error "Gate occupied, choose another"
+end
+
+@enduml

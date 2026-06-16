@@ -1,0 +1,26 @@
+@startuml UC13_BookCargoFlight
+autonumber
+
+actor "Passenger" as Passenger
+participant "System" as Sys
+database "Airport Database" as DB
+participant "PaymentGateway" as PaymentGateway
+participant "EmailProvider" as EmailProvider
+
+Passenger -> Sys : Click "Book now" (Cargo flight)
+Sys -> Passenger : Ask for cargo details
+Passenger -> Sys : Submit cargo details
+Sys -> DB : Calculate final cost
+DB --> Sys : Total amount
+Sys -> Passenger : Request payment information
+Passenger -> Sys : Submit payment information
+Sys -> PaymentGateway : Process payment
+PaymentGateway --> Sys : Payment approved
+Sys -> DB : Reserve cargo space
+Sys -> DB : Create booking reference
+Sys -> DB : Update cargo capacity
+Sys -> Passenger : Display success message with booking reference
+Sys -> EmailProvider : Send confirmation email
+EmailProvider --> Sys : Confirmation sent
+
+@enduml

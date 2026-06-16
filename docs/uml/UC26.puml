@@ -1,0 +1,37 @@
+@startuml UC26_AircraftManagement
+autonumber
+
+actor "Ground Manager" as GroundManager
+participant "System" as Sys
+database "Airport Database" as DB
+actor "Ground Staff" as GroundStaff
+actor "Airline Flight Scheduling Engine" as SchedulingEngine
+
+GroundManager -> Sys : Access aircraft management
+Sys -> DB : Retrieve aircraft list
+DB --> Sys : Aircraft list
+Sys -> GroundManager : Display aircraft list
+GroundManager -> Sys : Select aircraft / Request current status
+Sys -> DB : Retrieve status
+DB --> Sys : Status details
+Sys -> GroundManager : Display current status
+GroundManager -> Sys : Submit new status
+Sys -> DB : Validate status change
+DB --> Sys : Validation result
+
+alt Status change valid
+    Sys -> DB : Save updated status
+    DB --> Sys : Update confirmed
+
+    alt Status = Under Maintenance
+        Sys -> SchedulingEngine : Lock flight assignment
+    end
+
+    Sys -> GroundStaff : Notify status change
+    Sys -> SchedulingEngine : Sync aircraft availability
+    Sys -> GroundManager : Display success message
+else Invalid status
+    Sys -> GroundManager : Show error message
+end
+
+@enduml

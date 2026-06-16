@@ -1,0 +1,22 @@
+@startuml UC19_PushPricingUpdate
+autonumber
+
+actor "Airline Pricing Engine" as PricingEngine
+participant "System" as Sys
+database "Airport Database" as DB
+actor "Airport Administrator" as AirportAdministrator
+actor "Ground Manager" as GroundManager
+
+PricingEngine -> Sys : Push updated pricing data
+Sys -> DB : Update pricing records
+DB --> Sys : Save confirmed
+
+alt Update successful
+    Sys -> AirportAdministrator : Notify pricing update
+    Sys -> GroundManager : Notify pricing update
+else Database failure
+    Sys -> AirportAdministrator : Notify update error
+    Sys -> GroundManager : Notify update error
+end
+
+@enduml

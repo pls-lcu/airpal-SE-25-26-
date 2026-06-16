@@ -1,0 +1,27 @@
+@startuml UC21_AssignFlightCrews
+autonumber
+
+actor "Airline Manager" as AirlineManager
+participant "System" as Sys
+database "Airport Database" as DB
+actor "Airport Administrator" as AirportAdministrator
+actor "Flight Crew" as FlightCrew
+
+AirlineManager -> Sys : Access "Assign flight crews"
+Sys -> DB : Retrieve scheduled flights
+DB --> Sys : Flight list
+Sys -> AirlineManager : Display schedule
+AirlineManager -> Sys : Select flight / Assign crew
+Sys -> DB : Save crew assignment
+DB --> Sys : Assignment saved
+Sys -> AirportAdministrator : Notify crew assignment
+Sys -> FlightCrew : Notify new flight assignment
+
+alt Notification failed
+    Sys -> DB : Delete assignment
+    Sys -> AirlineManager : Error "Notification failed, assignment rolled back"
+else Notification successful
+    Sys -> AirlineManager : Assignment successful
+end
+
+@enduml

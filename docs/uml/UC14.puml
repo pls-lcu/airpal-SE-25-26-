@@ -1,0 +1,24 @@
+@startuml UC14_ReportLostItem
+autonumber
+
+actor "Passenger" as Passenger
+participant "System" as Sys
+database "Airport Database" as DB
+actor "Ground Manager" as GroundManager
+
+Passenger -> Sys : Access "Report lost items"
+Sys -> Passenger : Request item info and flight details
+Passenger -> Sys : Submit lost item details
+Sys -> DB : Validate passenger-flight match
+DB --> Sys : Validation result
+
+alt Invalid information
+    Sys -> Passenger : Show error message
+else Valid information
+    Sys -> DB : Create lost item ticket
+    DB --> Sys : Ticket created
+    Sys -> GroundManager : Notify lost item report
+    Sys -> Passenger : Display success message
+end
+
+@enduml
