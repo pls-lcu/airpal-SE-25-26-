@@ -1,0 +1,28 @@
+@startuml UC27_WeatherDataUpdate
+autonumber
+
+actor "Weather Provider" as WeatherProvider
+actor "In-house Weather Station" as WeatherStation
+participant "System" as Sys
+database "Airport Database" as DB
+actor "Airport Administrator" as AirportAdministrator
+
+WeatherProvider -> Sys : Send regional weather data
+WeatherStation -> Sys : Send local weather data
+Sys -> Sys : Validate weather data
+
+alt All sources valid
+    Sys -> DB : Save updated weather data
+    DB --> Sys : Update confirmed
+else One source unavailable
+    Sys -> DB : Save partial weather data
+    DB --> Sys : Update confirmed
+    Sys -> AirportAdministrator : Notify source failure
+else No valid data
+    Sys -> AirportAdministrator : Alert "Weather update failed"
+    Sys -> Sys : Log failure
+end
+
+Sys -> DB : Update operational dashboards
+
+@enduml
