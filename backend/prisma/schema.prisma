@@ -1,13 +1,247 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+// ─────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────
+
+enum UserType {
+  PASSENGER
+  SYSTEM_ADMIN
+  AIRPORT_ADMIN
+  GROUND_MANAGER
+  GROUND_STAFF
+  AIRLINE_MANAGER
+  FLIGHT_CREW
+}
+
+enum FlightType {
+  PASSENGER
+  CARGO
+}
+
+enum ScheduleStatus {
+  ON_TIME
+  DELAYED
+  CANCELLED
+}
+
+enum BookingStatus {
+  CONFIRMED
+  MODIFIED
+  CANCELLED
+}
+
+// ─────────────────────────────────────────
+// IDENTITY & ACCESS
+// ─────────────────────────────────────────
+
+// Single-table inheritance: one row per user regardless of concrete type.
+// userType discriminates between Passenger, AirportStaff subtypes, and AirlineStaff subtypes.
+model User {
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
+  name       String
+  surname    String
+  email      String   @unique
+  password   String
+  userType   UserType
+  isActive   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  // Passenger-only
+  passportNo String?
+
+  // Staff-only (AirportStaff / AirlineStaff subtypes)
+  employeeID String?  @unique
+
+  // Used during registration: a random token emailed to the user to confirm their address
+  verificationToken String? @unique
+
+  // Relations
+  bookings               Booking[]
+  passwordResetTokens    PasswordResetToken[]
+  bugReports             BugReport[]
+  customerSupportTickets CustomerSupportTicket[]
+  assistanceRequests     AssistanceRequest[]
+  lostItemReports        LostItemReport[]
+  crewAssignments        FlightCrewAssignment[]
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+}
+
+// ─────────────────────────────────────────
+// AVIATION OPERATIONS
+// ─────────────────────────────────────────
+
+model Flight {
+  id            Int        @id @default(autoincrement())
+  flightNo      String     @unique
+  origin        String
+  destination   String
+  departureTime DateTime
+  arrivalTime   DateTime
+  type          FlightType @default(PASSENGER)
+  createdAt     DateTime   @default(now())
+
+  // Aggregations (optional — aircraft/gate exist independently)
+  aircraftId Int?
+  aircraft   Aircraft? @relation(fields: [aircraftId], references: [id])
+
+  gateId Int?
+  gate   Gate? @relation(fields: [gateId], references: [id])
+
+  // Composition (1-to-1, schedule belongs to this flight)
+  schedule Schedule?
+
+  bookings        Booking[]
+  crewAssignments FlightCrewAssignment[]
+}
+
+// 1-to-1 composition with Flight
+model Schedule {
+  id       Int            @id @default(autoincrement())
+  status   ScheduleStatus @default(ON_TIME)
+
+  flightId Int    @unique
+  flight   Flight @relation(fields: [flightId], references: [id], onDelete: Cascade)
+}
+
+model Aircraft {
+  id         Int      @id @default(autoincrement())
+  tailNumber String   @unique
+  status     String   @default("available")
+  flights    Flight[]
+}
+
+model Gate {
+  id       Int      @id @default(autoincrement())
+  gateID   String   @unique
+  terminal String
+  flights  Flight[]
+}
+
+// Junction table for the M:N FlightCrew ↔ Flight assignment (UC21)
+model FlightCrewAssignment {
+  id           Int    @id @default(autoincrement())
+  flightId     Int
+  flight       Flight @relation(fields: [flightId], references: [id])
+  crewMemberId Int
+  crewMember   User   @relation(fields: [crewMemberId], references: [id])
+
+  @@unique([flightId, crewMemberId])
+}
+
+// ─────────────────────────────────────────
+// COMMERCE & LOGISTICS
+// ─────────────────────────────────────────
+
+model Booking {
+  id         Int           @id @default(autoincrement())
+  bookingRef String        @unique @default(cuid())
+  totalPrice Float
+  status     BookingStatus @default(CONFIRMED)
+  createdAt  DateTime      @default(now())
+
+  passengerId Int
+  passenger   User   @relation(fields: [passengerId], references: [id])
+  flightId    Int
+  flight      Flight @relation(fields: [flightId], references: [id])
+
+  tickets        Ticket[]
+  cargoShipments CargoShipment[]
+}
+
+model Ticket {
+  id         Int     @id @default(autoincrement())
+  seatNumber String
+  checkedIn  Boolean @default(false)
+
+  bookingId Int
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  baggage Baggage[]
+}
+
+model CargoShipment {
+  id         Int    @id @default(autoincrement())
+  shipmentID String @unique @default(cuid())
+  weight     Float
+
+  bookingId Int
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+model Baggage {
+  id    Int    @id @default(autoincrement())
+  tagID String @unique
+
+  ticketId Int
+  ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+}
+
+// ─────────────────────────────────────────
+// MONITORING & FEEDBACK
+// ─────────────────────────────────────────
+
+model BugReport {
+  id          Int      @id @default(autoincrement())
+  bugID       String   @unique @default(cuid())
+  description String
+  createdAt   DateTime @default(now())
+
+  reporterId Int
+  reporter   User @relation(fields: [reporterId], references: [id])
+}
+
+model CustomerSupportTicket {
+  id          Int      @id @default(autoincrement())
+  ticketID    String   @unique @default(cuid())
+  description String
+  createdAt   DateTime @default(now())
+
+  passengerId Int
+  passenger   User @relation(fields: [passengerId], references: [id])
+}
+
+model AssistanceRequest {
+  id        Int      @id @default(autoincrement())
+  requestID String   @unique @default(cuid())
+  type      String
+  createdAt DateTime @default(now())
+
+  passengerId Int
+  passenger   User @relation(fields: [passengerId], references: [id])
+}
+
+model LostItemReport {
+  id          Int      @id @default(autoincrement())
+  reportID    String   @unique @default(cuid())
+  description String
+  createdAt   DateTime @default(now())
+
+  passengerId Int
+  passenger   User @relation(fields: [passengerId], references: [id])
+}
+
+model WeatherData {
+  id                 Int      @id @default(autoincrement())
+  localConditions    String
+  regionalConditions String
+  updatedAt          DateTime @updatedAt
 }
