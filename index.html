@@ -1,0 +1,499 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ap-blue:#1a6fba;--ap-blue-light:#e8f2fb;
+  --ap-navy:#0d4a82;--ap-text:#1a2433;--ap-muted:#5a6a7e;
+  --ap-border:#d0dcea;--ap-bg:#f4f7fb;--ap-green:#1a7a4a;
+  --ap-green-light:#e6f4ed;--ap-red:#c0392b;--ap-red-light:#fdecea;
+  --ap-amber:#b86e00;--ap-amber-light:#fef3e0;
+}
+body{font-family:system-ui,-apple-system,sans-serif;color:var(--ap-text);background:var(--ap-bg)}
+.ap-nav{background:#fff;border-bottom:1px solid var(--ap-border);padding:0 24px;display:flex;align-items:center;position:sticky;top:0;z-index:100}
+.ap-brand{font-size:20px;font-weight:700;color:var(--ap-blue);margin-right:32px;padding:14px 0}
+.nav-tab{padding:14px 16px;font-size:13px;font-weight:500;color:var(--ap-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
+.nav-tab.active{color:var(--ap-blue);border-bottom-color:var(--ap-blue)}
+.nav-tab:hover:not(.active){color:var(--ap-text)}
+.nav-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn{padding:7px 16px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--ap-border);background:#fff;color:var(--ap-text);transition:all .12s}
+.btn:hover{background:var(--ap-bg)}
+.btn-primary{background:var(--ap-blue);color:#fff;border-color:var(--ap-blue)}
+.btn-primary:hover{background:var(--ap-navy)}
+.btn-sm{padding:5px 12px;font-size:12px}
+.btn-ghost{background:transparent;border:none;color:var(--ap-blue);cursor:pointer;font-size:13px;padding:0}
+.view{display:none}.view.active{display:block}
+
+/* HERO with clouds */
+.hero{background:linear-gradient(170deg,#1558a0 0%,#1a6fba 35%,#3b8de0 70%,#6aaee8 100%);padding:32px 24px 28px;color:#fff;position:relative;overflow:hidden}
+.hero-content{position:relative;z-index:2}
+.hero h1{font-size:24px;font-weight:700;margin-bottom:6px}
+.hero p{font-size:14px;opacity:.9;margin-bottom:18px}
+
+/* SVG clouds layer */
+.clouds-layer{position:absolute;inset:0;z-index:1;pointer-events:none}
+
+.search-card{background:#fff;border-radius:12px;padding:18px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.form-grid-4{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px}
+.field{margin-bottom:0}
+.field label{font-size:11px;font-weight:600;color:var(--ap-muted);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px}
+.field input,.field select{width:100%;padding:9px 12px;border:1px solid var(--ap-border);border-radius:8px;font-size:14px;color:var(--ap-text);outline:none;font-family:inherit;background:#fff}
+.field input:focus,.field select:focus{border-color:var(--ap-blue);box-shadow:0 0 0 3px rgba(26,111,186,.1)}
+.gate-ticker{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.28);border-radius:8px;padding:7px 12px;margin-top:14px;display:flex;align-items:center;gap:10px;font-size:12px;flex-wrap:wrap}
+.ticker-items{display:flex;gap:8px;flex-wrap:wrap}
+.ticker-pill{background:rgba(255,255,255,.22);border-radius:20px;padding:2px 9px;font-size:11px;display:flex;align-items:center;gap:4px}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.dot-green{background:#4ade80}.dot-amber{background:#fbbf24}.dot-red{background:#f87171}
+.quick-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:20px 24px}
+.qcard{background:#fff;border:1px solid var(--ap-border);border-radius:10px;padding:16px;cursor:pointer;transition:all .15s}
+.qcard:hover{border-color:var(--ap-blue);box-shadow:0 2px 12px rgba(26,111,186,.1)}
+.qcard-icon{font-size:20px;color:var(--ap-blue);margin-bottom:7px}
+.qcard h3{font-size:14px;font-weight:600;margin-bottom:3px}
+.qcard p{font-size:12px;color:var(--ap-muted)}
+.notif{border-radius:6px;padding:10px 12px;font-size:13px;margin-bottom:12px}
+.notif.danger{background:var(--ap-red-light);color:var(--ap-red);border-left:3px solid var(--ap-red)}
+.notif.success{background:var(--ap-green-light);color:var(--ap-green);border-left:3px solid var(--ap-green)}
+.notif.warning{background:var(--ap-amber-light);color:var(--ap-amber);border-left:3px solid var(--ap-amber)}
+.divider{border:none;border-top:1px solid var(--ap-border);margin:16px 0}
+.auth-wrap{min-height:420px;display:flex;align-items:center;justify-content:center;padding:32px 24px}
+.auth-card{background:#fff;border:1px solid var(--ap-border);border-radius:14px;padding:28px;width:100%;max-width:380px}
+.auth-logo{font-size:22px;font-weight:700;color:var(--ap-blue);margin-bottom:6px}
+.auth-card h2{font-size:17px;font-weight:600;margin-bottom:4px}
+.auth-card > p{font-size:13px;color:var(--ap-muted);margin-bottom:20px}
+.demo-pills{display:flex;flex-direction:column;gap:7px}
+.demo-pill{background:var(--ap-bg);border:1px solid var(--ap-border);border-radius:8px;padding:9px 12px;cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:space-between}
+.demo-pill:hover{border-color:var(--ap-blue);background:var(--ap-blue-light)}
+.demo-pill-left{display:flex;align-items:center;gap:9px}
+.role-badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px}
+.rb-passenger{background:#e8f2fb;color:#0d4a82}
+.rb-staff{background:#fef3e0;color:#b86e00}
+.rb-admin{background:#fdecea;color:#c0392b}
+.demo-pill-creds{font-size:11px;color:var(--ap-muted)}
+.session-bar{background:var(--ap-navy);color:#fff;padding:6px 24px;font-size:12px;display:flex;align-items:center;gap:10px}
+.session-bar span{opacity:.75}
+.session-role{background:rgba(255,255,255,.18);border-radius:20px;padding:2px 10px;font-size:11px;font-weight:600}
+.session-bar button{margin-left:auto;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:5px;padding:3px 10px;font-size:11px;cursor:pointer}
+.session-bar button:hover{background:rgba(255,255,255,.25)}
+.access-denied{padding:40px 24px;text-align:center}
+.access-denied .icon{font-size:40px;color:var(--ap-muted);margin-bottom:12px}
+.access-denied h2{font-size:17px;font-weight:600;margin-bottom:6px}
+.access-denied p{font-size:13px;color:var(--ap-muted);margin-bottom:20px}
+.section{padding:18px 24px}
+.section h2{font-size:15px;font-weight:600;margin-bottom:12px}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.stat-card{background:#fff;border:1px solid var(--ap-border);border-radius:10px;padding:14px}
+.stat-num{font-size:26px;font-weight:700;color:var(--ap-blue)}
+.stat-label{font-size:12px;color:var(--ap-muted);margin-top:2px}
+.results-list{display:flex;flex-direction:column;gap:10px}
+.flight-card{background:#fff;border:1px solid var(--ap-border);border-radius:10px;padding:14px;display:flex;align-items:center;gap:14px}
+.fl-times{flex:1}
+.fl-route{font-size:17px;font-weight:600;display:flex;align-items:center;gap:8px}
+.fl-arrow{color:var(--ap-muted);font-size:13px}
+.fl-info{font-size:12px;color:var(--ap-muted);margin-top:2px}
+.fl-price strong{font-size:19px;font-weight:700;color:var(--ap-blue)}
+.fl-price span{font-size:12px;color:var(--ap-muted);display:block}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.badge-green{background:var(--ap-green-light);color:var(--ap-green)}
+.badge-amber{background:var(--ap-amber-light);color:var(--ap-amber)}
+.badge-blue{background:var(--ap-blue-light);color:var(--ap-navy)}
+.badge-red{background:var(--ap-red-light);color:var(--ap-red)}
+.area-header{padding:18px 24px 14px;border-bottom:1px solid var(--ap-border);background:#fff}
+.area-header h1{font-size:17px;font-weight:600}
+.area-header p{font-size:12px;color:var(--ap-muted);margin-top:2px}
+.sidebar-layout{display:grid;grid-template-columns:190px 1fr;min-height:360px}
+.sidebar{background:#fff;border-right:1px solid var(--ap-border);padding:10px 0}
+.sidebar-item{padding:9px 14px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--ap-muted);border-left:3px solid transparent;transition:all .12s}
+.sidebar-item.active{color:var(--ap-blue);border-left-color:var(--ap-blue);background:var(--ap-blue-light)}
+.sidebar-item:hover:not(.active){background:var(--ap-bg);color:var(--ap-text)}
+.sidebar-content{padding:14px 16px}
+.table-wrap{background:#fff;border:1px solid var(--ap-border);border-radius:10px;overflow:hidden;margin-top:10px}
+.ap-table{width:100%;border-collapse:collapse;font-size:13px}
+.ap-table th{background:var(--ap-bg);padding:9px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--ap-muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--ap-border)}
+.ap-table td{padding:10px 12px;border-bottom:1px solid var(--ap-border)}
+.ap-table tr:last-child td{border-bottom:none}
+.ap-table tr:hover td{background:var(--ap-bg)}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.section-header h2{font-size:14px;font-weight:600}
+.gate-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}
+.gate-cell{background:#fff;border:1px solid var(--ap-border);border-radius:8px;padding:9px;text-align:center}
+.gate-cell.on-time{border-color:var(--ap-green);background:var(--ap-green-light)}
+.gate-cell.boarding{border-color:var(--ap-amber);background:var(--ap-amber-light)}
+.gate-cell.delayed{border-color:var(--ap-red);background:var(--ap-red-light)}
+.gate-name{font-size:13px;font-weight:700}
+.gate-status{font-size:11px;margin-top:2px}
+.subview{display:none}.subview.active{display:block}
+
+/* Pax hero mini */
+.pax-hero{background:linear-gradient(170deg,#1558a0 0%,#1a6fba 40%,#3b8de0 100%);padding:20px 24px;color:#fff;position:relative;overflow:hidden}
+.pax-hero-content{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center}
+</style>
+
+<nav class="ap-nav">
+  <div class="ap-brand">AirPal</div>
+  <div class="nav-tab active" id="tab-home" onclick="goTo('home')">Home</div>
+  <div class="nav-tab" id="tab-passenger" onclick="requireAuth('passenger','passenger')">My Bookings</div>
+  <div class="nav-tab" id="tab-staff" onclick="requireAuth('staff','staff')">Staff Area</div>
+  <div class="nav-tab" id="tab-admin" onclick="requireAuth('admin','admin')">Admin</div>
+  <div class="nav-actions" id="nav-actions">
+    <button class="btn btn-sm" onclick="goTo('register')">Register</button>
+    <button class="btn btn-primary btn-sm" onclick="goTo('login',null)">Log in</button>
+  </div>
+</nav>
+
+<div class="session-bar" id="session-bar" style="display:none">
+  <span>Logged in as</span>
+  <strong id="session-name">—</strong>
+  <span id="session-role-badge" class="session-role">—</span>
+  <span style="opacity:.4">·</span>
+  <span id="session-email-txt" style="opacity:.6">—</span>
+  <button onclick="logout()">Log out</button>
+</div>
+
+<!-- HOME -->
+<div id="view-home" class="view active">
+  <div class="hero">
+    <!-- SVG cloud layer -->
+    <svg class="clouds-layer" viewBox="0 0 700 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <!-- large back cloud right -->
+      <ellipse cx="580" cy="60" rx="90" ry="38" fill="white" opacity="0.13"/>
+      <ellipse cx="630" cy="52" rx="55" ry="30" fill="white" opacity="0.13"/>
+      <ellipse cx="540" cy="68" rx="50" ry="24" fill="white" opacity="0.13"/>
+      <!-- mid cloud right -->
+      <ellipse cx="610" cy="100" rx="60" ry="26" fill="white" opacity="0.10"/>
+      <ellipse cx="655" cy="94" rx="38" ry="20" fill="white" opacity="0.10"/>
+      <ellipse cx="572" cy="108" rx="36" ry="16" fill="white" opacity="0.10"/>
+      <!-- small puff top right -->
+      <ellipse cx="490" cy="30" rx="40" ry="18" fill="white" opacity="0.09"/>
+      <ellipse cx="520" cy="24" rx="26" ry="14" fill="white" opacity="0.09"/>
+      <!-- tiny cloud far right bottom -->
+      <ellipse cx="670" cy="150" rx="44" ry="18" fill="white" opacity="0.08"/>
+      <ellipse cx="700" cy="145" rx="28" ry="14" fill="white" opacity="0.08"/>
+      <!-- subtle left wisps -->
+      <ellipse cx="60" cy="40" rx="48" ry="18" fill="white" opacity="0.07"/>
+      <ellipse cx="30" cy="34" rx="28" ry="13" fill="white" opacity="0.07"/>
+      <ellipse cx="100" cy="170" rx="55" ry="20" fill="white" opacity="0.06"/>
+      <ellipse cx="55" cy="175" rx="32" ry="14" fill="white" opacity="0.06"/>
+    </svg>
+    <div class="hero-content">
+      <h1>Where do you want to fly?</h1>
+      <p>Search hundreds of airlines and routes — all in one place.</p>
+      <div class="search-card">
+        <div class="form-grid">
+          <div class="field"><label>From</label><input type="text" value="Rome (FCO)"></div>
+          <div class="field"><label>To</label><input type="text" placeholder="Destination" id="dest-in"></div>
+        </div>
+        <div style="height:10px"></div>
+        <div class="form-grid-4">
+          <div class="field"><label>Depart</label><input type="date" value="2026-07-10"></div>
+          <div class="field"><label>Return</label><input type="date" value="2026-07-17"></div>
+          <div class="field"><label>Passengers</label><select><option>1 pax · Economy</option><option>2 pax · Economy</option><option>1 pax · Business</option></select></div>
+          <div style="display:flex;align-items:flex-end"><button class="btn btn-primary" style="width:100%;padding:9px 0" onclick="doSearch()">Search</button></div>
+        </div>
+      </div>
+      <div class="gate-ticker">
+        <span style="opacity:.8">Live:</span>
+        <div class="ticker-items">
+          <span class="ticker-pill"><span class="dot dot-green"></span>Gate B12 — On time</span>
+          <span class="ticker-pill"><span class="dot dot-amber"></span>Gate A4 — Boarding</span>
+          <span class="ticker-pill"><span class="dot dot-red"></span>Gate C3 — Delayed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="home-results" style="display:none;padding:0 24px 20px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin:16px 0 12px">
+      <h2 style="font-size:15px;font-weight:600">Flights — FCO → <span id="dest-out">LHR</span></h2>
+      <button class="btn btn-sm" onclick="document.getElementById('home-results').style.display='none'">← Back</button>
+    </div>
+    <div class="results-list">
+      <div class="flight-card"><div style="text-align:center;min-width:46px"><div style="font-size:10px;color:var(--ap-muted)">IB</div><div style="font-size:13px;font-weight:600">Iberia</div></div><div class="fl-times"><div class="fl-route">08:30 <span class="fl-arrow">→</span> 11:45</div><div class="fl-info">Non-stop · FCO→LHR · 3h 15m</div></div><span class="badge badge-green">On time</span><div class="fl-price"><strong>€189</strong><span>per pax</span><button class="btn btn-primary btn-sm" style="margin-top:5px" onclick="requireAuth('passenger','passenger')">Book</button></div></div>
+      <div class="flight-card"><div style="text-align:center;min-width:46px"><div style="font-size:10px;color:var(--ap-muted)">FR</div><div style="font-size:13px;font-weight:600">Ryanair</div></div><div class="fl-times"><div class="fl-route">17:55 <span class="fl-arrow">→</span> 21:15</div><div class="fl-info">Non-stop · FCO→STN · 3h 20m</div></div><span class="badge badge-blue">Economy</span><div class="fl-price"><strong>€79</strong><span>per pax</span><button class="btn btn-primary btn-sm" style="margin-top:5px" onclick="requireAuth('passenger','passenger')">Book</button></div></div>
+    </div>
+  </div>
+
+  <div class="quick-cards">
+    <div class="qcard" onclick="doSearch()"><div class="qcard-icon">↗</div><h3>Popular routes</h3><p>FCO → LHR, CDG, JFK</p></div>
+    <div class="qcard"><div class="qcard-icon">🏷</div><h3>Deals this week</h3><p>Flash fares from €49 one-way</p></div>
+    <div class="qcard"><div class="qcard-icon">🗺</div><h3>Airport map</h3><p>Real-time gate status</p></div>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div id="view-register" class="view">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">AirPal</div>
+      <h2>Create your account</h2>
+      <p>Book flights and manage your trips in one place.</p>
+      <div class="field" style="margin-bottom:12px"><label>Full name</label><input type="text" placeholder="Your name"></div>
+      <div class="field" style="margin-bottom:12px"><label>Email address</label><input type="email" placeholder="you@example.com" id="reg-email"></div>
+      <div class="field" style="margin-bottom:12px"><label>Password</label><input type="password" placeholder="Min. 8 characters"></div>
+      <div id="reg-err" style="display:none" class="notif"></div>
+      <button class="btn btn-primary" style="width:100%;padding:10px 0;margin-top:4px" onclick="doRegister()">Create account</button>
+      <p style="font-size:13px;color:var(--ap-muted);text-align:center;margin-top:14px">Already have an account? <button class="btn-ghost" onclick="goTo('login','passenger')">Log in</button></p>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="view-login" class="view">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">AirPal</div>
+      <h2>Log in</h2>
+      <p>Welcome back.</p>
+      <div id="login-access-warn" style="display:none" class="notif warning"></div>
+      <div class="field" style="margin-bottom:12px"><label>Email</label><input type="email" id="login-email" placeholder="your@email.com"></div>
+      <div class="field" style="margin-bottom:4px"><label>Password</label><input type="password" id="login-pw" placeholder="••••••••"></div>
+      <div style="text-align:right;margin-bottom:12px"><button class="btn-ghost" style="font-size:12px">Forgot password?</button></div>
+      <div id="login-err" style="display:none" class="notif danger"></div>
+      <button class="btn btn-primary" style="width:100%;padding:10px 0;margin-bottom:14px" onclick="doLogin()">Log in</button>
+      <hr class="divider">
+      <p style="font-size:12px;color:var(--ap-muted);text-align:center;margin-bottom:10px">Try a demo account</p>
+      <div class="demo-pills">
+        <div class="demo-pill" onclick="quickLogin('passenger')">
+          <div class="demo-pill-left">
+            <span class="role-badge rb-passenger">Passenger</span>
+            <div><div style="font-size:13px;font-weight:500">Trafalgar Law</div><div class="demo-pill-creds">tlaw@example.com · password123</div></div>
+          </div>
+          <span style="color:var(--ap-muted);font-size:14px">→</span>
+        </div>
+        <div class="demo-pill" onclick="quickLogin('staff')">
+          <div class="demo-pill-left">
+            <span class="role-badge rb-staff">Staff</span>
+            <div><div style="font-size:13px;font-weight:500">Luca Paloschi</div><div class="demo-pill-creds">luca@airpal.com · staff2026</div></div>
+          </div>
+          <span style="color:var(--ap-muted);font-size:14px">→</span>
+        </div>
+        <div class="demo-pill" onclick="quickLogin('admin')">
+          <div class="demo-pill-left">
+            <span class="role-badge rb-admin">Admin</span>
+            <div><div style="font-size:13px;font-weight:500">Primia Awal</div><div class="demo-pill-creds">primia@airpal.com · admin2026</div></div>
+          </div>
+          <span style="color:var(--ap-muted);font-size:14px">→</span>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--ap-muted);text-align:center;margin-top:14px">No account? <button class="btn-ghost" onclick="goTo('register')">Register</button></p>
+    </div>
+  </div>
+</div>
+
+<!-- PASSENGER -->
+<div id="view-passenger" class="view">
+  <div class="pax-hero">
+    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 700 100" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="580" cy="30" rx="80" ry="30" fill="white" opacity="0.10"/>
+      <ellipse cx="625" cy="24" rx="50" ry="22" fill="white" opacity="0.10"/>
+      <ellipse cx="540" cy="38" rx="44" ry="18" fill="white" opacity="0.10"/>
+      <ellipse cx="80" cy="70" rx="60" ry="22" fill="white" opacity="0.07"/>
+      <ellipse cx="40" cy="65" rx="34" ry="16" fill="white" opacity="0.07"/>
+    </svg>
+    <div class="pax-hero-content">
+      <div>
+        <div style="font-size:11px;opacity:.7;text-transform:uppercase;letter-spacing:.06em">Passenger dashboard</div>
+        <h1 style="font-size:19px;font-weight:700;margin-top:2px;color:#fff" id="pax-welcome">Welcome back, Trafalgar</h1>
+      </div>
+      <button class="btn btn-sm" style="background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.3);color:#fff">+ Book ticket</button>
+    </div>
+  </div>
+  <div class="section">
+    <div class="dash-grid">
+      <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Upcoming flights</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--ap-green)">1</div><div class="stat-label">Ready to check in</div></div>
+    </div>
+    <h2>Your upcoming flights</h2>
+    <div class="results-list">
+      <div class="flight-card"><div style="text-align:center;min-width:46px"><div style="font-size:10px;color:var(--ap-muted)">IB2340</div><div style="font-size:13px;font-weight:600">Iberia</div></div><div class="fl-times"><div class="fl-route">FCO <span class="fl-arrow">→</span> LHR</div><div class="fl-info">10 Jul 2026 · 08:30–11:45 · Seat 14A</div></div><span class="badge badge-green">Confirmed</span><div style="display:flex;flex-direction:column;gap:5px"><button class="btn btn-primary btn-sm">Check in</button><button class="btn btn-sm">View</button></div></div>
+      <div class="flight-card"><div style="text-align:center;min-width:46px"><div style="font-size:10px;color:var(--ap-muted)">BA559</div><div style="font-size:13px;font-weight:600">Brit. Air.</div></div><div class="fl-times"><div class="fl-route">LHR <span class="fl-arrow">→</span> JFK</div><div class="fl-info">17 Jul 2026 · 13:00–16:20 · Seat 32C</div></div><span class="badge badge-blue">Check-in opens 16 Jul</span><button class="btn btn-sm" disabled>Not yet open</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- STAFF -->
+<div id="view-staff" class="view">
+  <div class="area-header"><h1>Staff admin area</h1><p>Operations workspace · <span class="role-badge rb-staff" style="font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600">Staff</span> access</p></div>
+  <div class="sidebar-layout">
+    <div class="sidebar">
+      <div class="sidebar-item active" onclick="switchSub('staff','gates',this)">Assign gate</div>
+      <div class="sidebar-item" onclick="switchSub('staff','aircraft',this)">Update aircraft</div>
+    </div>
+    <div class="sidebar-content">
+      <div id="staff-gates" class="subview active">
+        <div class="section-header"><h2>Gate assignment</h2><button class="btn btn-primary btn-sm">+ Assign</button></div>
+        <div class="gate-grid">
+          <div class="gate-cell on-time"><div class="gate-name">A1</div><div class="gate-status"><span class="badge badge-green">On time</span></div></div>
+          <div class="gate-cell boarding"><div class="gate-name">A4</div><div class="gate-status"><span class="badge badge-amber">Boarding</span></div></div>
+          <div class="gate-cell on-time"><div class="gate-name">B12</div><div class="gate-status"><span class="badge badge-green">On time</span></div></div>
+          <div class="gate-cell delayed"><div class="gate-name">C3</div><div class="gate-status"><span class="badge badge-red">Delayed</span></div></div>
+        </div>
+        <div class="table-wrap">
+          <table class="ap-table"><thead><tr><th>Flight</th><th>Route</th><th>Gate</th><th>Status</th></tr></thead>
+          <tbody><tr><td>IB2340</td><td>FCO→LHR</td><td>—</td><td><span class="badge badge-amber">Unassigned</span></td></tr>
+          <tr><td>FR1128</td><td>FCO→STN</td><td>A4</td><td><span class="badge badge-amber">Boarding</span></td></tr></tbody></table>
+        </div>
+      </div>
+      <div id="staff-aircraft" class="subview">
+        <div class="section-header"><h2>Aircraft status</h2></div>
+        <div class="table-wrap">
+          <table class="ap-table"><thead><tr><th>Reg.</th><th>Type</th><th>Flight</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody><tr><td>EI-DVM</td><td>A320</td><td>IB2340</td><td><span class="badge badge-blue">In flight</span></td><td><button class="btn btn-primary btn-sm">Mark landed</button></td></tr>
+          <tr><td>G-EUOE</td><td>A319</td><td>BA559</td><td><span class="badge badge-amber">Boarding</span></td><td><button class="btn btn-sm">Update</button></td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="view-admin" class="view">
+  <div class="area-header"><h1>Unified admin dashboard</h1><p>Full workspace · <span class="role-badge rb-admin" style="font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600">Admin</span> access only</p></div>
+  <div class="sidebar-layout">
+    <div class="sidebar">
+      <div class="sidebar-item active" onclick="switchSub('admin','schedule',this)">Flight schedule</div>
+      <div class="sidebar-item" onclick="switchSub('admin','workers',this)">Manage staff</div>
+      <div class="sidebar-item" onclick="switchSub('admin','bugs',this)">Bug reports</div>
+      <div class="sidebar-item" onclick="switchSub('admin','support',this)">Support queue</div>
+    </div>
+    <div class="sidebar-content">
+      <div id="admin-schedule" class="subview active">
+        <div class="section-header"><h2>Schedule modification</h2><button class="btn btn-primary btn-sm">+ Input delay</button></div>
+        <div class="table-wrap">
+          <table class="ap-table"><thead><tr><th>Flight</th><th>Route</th><th>Dep.</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>IB2340</td><td>FCO→LHR</td><td>08:30</td><td><span class="badge badge-green">On time</span></td><td><button class="btn btn-sm">Modify</button></td></tr>
+            <tr><td>FR1128</td><td>FCO→STN</td><td>17:55</td><td><span class="badge badge-red">Delayed +40m</span></td><td><button class="btn btn-sm">Modify</button></td></tr>
+            <tr><td>AZ204</td><td>FCO→CDG</td><td>12:10</td><td><span class="badge badge-amber">Boarding</span></td><td><button class="btn btn-sm">Modify</button></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+      <div id="admin-workers" class="subview">
+        <div class="section-header"><h2>Worker accounts</h2><button class="btn btn-primary btn-sm">+ Add worker</button></div>
+        <div class="table-wrap">
+          <table class="ap-table"><thead><tr><th>Name</th><th>Role</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>Luca Paloschi</td><td>Gate agent</td><td><span class="badge badge-green">Active</span></td><td><button class="btn btn-sm">Edit</button></td></tr>
+            <tr><td>Marco Ferri</td><td>Check-in staff</td><td><span class="badge badge-amber">Inactive</span></td><td><button class="btn btn-sm">Activate</button></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+      <div id="admin-bugs" class="subview">
+        <div class="section-header"><h2>Bug ticket queue</h2></div>
+        <div class="table-wrap">
+          <table class="ap-table"><thead><tr><th>ID</th><th>Description</th><th>Priority</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>#1042</td><td>Gate display sync delay</td><td><span class="badge badge-red">High</span></td><td><span class="badge badge-amber">Open</span></td><td><button class="btn btn-sm">Archive</button></td></tr>
+            <tr><td>#1031</td><td>Boarding pass PDF error</td><td><span class="badge badge-blue">Low</span></td><td><span class="badge badge-green">Resolved</span></td><td><button class="btn btn-sm" disabled>Done</button></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+      <div id="admin-support" class="subview">
+        <div class="section-header"><h2>Escalated support tickets</h2></div>
+        <div class="table-wrap">
+          <table class="ap-table"><thead><tr><th>Ticket</th><th>Passenger</th><th>Issue</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>#S-201</td><td>J. Kowalski</td><td>Booking not confirmed</td><td><span class="badge badge-red">Escalated</span></td><td><button class="btn btn-primary btn-sm">Resolve</button></td></tr>
+            <tr><td>#S-190</td><td>P. Santos</td><td>Boarding pass invalid</td><td><span class="badge badge-green">Resolved</span></td><td><button class="btn btn-sm" disabled>Closed</button></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DENIED -->
+<div id="view-denied" class="view">
+  <div class="access-denied">
+    <div class="icon">🔒</div>
+    <h2 id="denied-title">Access restricted</h2>
+    <p id="denied-msg">You need to log in to view this area.</p>
+    <div style="display:flex;gap:10px;justify-content:center">
+      <button class="btn" onclick="goTo('home')">← Home</button>
+      <button class="btn btn-primary" id="denied-login-btn" onclick="goTo('login','passenger')">Log in</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var session = null, pendingTarget = null;
+var users = {
+  passenger:{name:'Trafalgar Law', email:'tlaw@example.com',   role:'passenger', roleLabel:'Passenger'},
+  staff:    {name:'Luca Paloschi', email:'luca@airpal.com',    role:'staff',     roleLabel:'Staff'},
+  admin:    {name:'Primia Awal',   email:'primia@airpal.com',  role:'admin',     roleLabel:'Admin'}
+};
+var roleColors={passenger:'rb-passenger',staff:'rb-staff',admin:'rb-admin'};
+
+function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));var el=document.getElementById('view-'+id);if(el)el.classList.add('active');}
+function setTab(id){document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));var t=document.getElementById('tab-'+id);if(t)t.classList.add('active');}
+function goTo(page,lt){if(lt!==undefined)pendingTarget=lt;showView(page);setTab(page);var w=document.getElementById('login-access-warn');if(w)w.style.display='none';}
+
+function requireAuth(req,page){
+  if(!session){
+    pendingTarget=page;showView('login');setTab('login');
+    var w=document.getElementById('login-access-warn');
+    var msgs={passenger:'Log in to view your bookings.',staff:'Staff area — log in with a staff account.',admin:'Admin area — restricted to admins.'};
+    w.className='notif warning';w.innerHTML=msgs[req]||msgs.passenger;w.style.display='block';return;
+  }
+  var order={passenger:0,staff:1,admin:2};
+  if(order[session.role]<order[req]){
+    showView('denied');setTab(page);
+    var rn={staff:'a staff account',admin:'an admin account'};
+    document.getElementById('denied-title').textContent='Insufficient access';
+    document.getElementById('denied-msg').textContent='This area requires '+(rn[req]||'a higher role')+'. You are logged in as '+session.roleLabel+'.';
+    document.getElementById('denied-login-btn').textContent='Switch account';
+    document.getElementById('denied-login-btn').onclick=function(){logout();goTo('login',page);};return;
+  }
+  showView(page);setTab(page);
+}
+
+function quickLogin(role){session=users[role];afterLogin();}
+
+function doLogin(){
+  var e=document.getElementById('login-email').value.trim();
+  var p=document.getElementById('login-pw').value;
+  var err=document.getElementById('login-err');err.style.display='none';
+  var found=null;for(var r in users){if(users[r].email===e)found=r;}
+  if(!found||!p){err.className='notif danger';err.innerHTML='Invalid email or password. Try a demo account below.';err.style.display='block';return;}
+  session=users[found];afterLogin();
+}
+
+function afterLogin(){
+  document.getElementById('session-bar').style.display='flex';
+  document.getElementById('session-name').textContent=session.name;
+  document.getElementById('session-email-txt').textContent=session.email;
+  var b=document.getElementById('session-role-badge');b.textContent=session.roleLabel;b.className='session-role '+roleColors[session.role];
+  document.getElementById('nav-actions').innerHTML='<button class="btn btn-sm" onclick="logout()">Log out</button>';
+  var fn=session.name.split(' ')[0];
+  var pw=document.getElementById('pax-welcome');if(pw)pw.textContent='Welcome back, '+fn;
+  var target=pendingTarget||(session.role==='passenger'?'passenger':session.role==='staff'?'staff':'admin');
+  pendingTarget=null;showView(target);setTab(target);
+  var err=document.getElementById('login-err');if(err)err.style.display='none';
+}
+
+function logout(){
+  session=null;pendingTarget=null;
+  document.getElementById('session-bar').style.display='none';
+  document.getElementById('nav-actions').innerHTML='<button class="btn btn-sm" onclick="goTo(\'register\')">Register</button><button class="btn btn-primary btn-sm" onclick="goTo(\'login\',null)">Log in</button>';
+  showView('home');setTab('home');
+}
+
+function doRegister(){
+  var email=document.getElementById('reg-email').value.trim();
+  var err=document.getElementById('reg-err');
+  if(!email||email.indexOf('@')<0){err.className='notif danger';err.innerHTML='Please enter a valid email.';err.style.display='block';return;}
+  err.className='notif success';err.innerHTML='Account created! You can now log in.';err.style.display='block';
+}
+
+function doSearch(){
+  var d=document.getElementById('dest-in').value||'LHR';
+  document.getElementById('dest-out').textContent=d;
+  document.getElementById('home-results').style.display='block';
+}
+
+function switchSub(area,id,el){
+  document.querySelectorAll('#view-'+area+' .subview').forEach(s=>s.classList.remove('active'));
+  document.getElementById(area+'-'+id).classList.add('active');
+  document.querySelectorAll('#view-'+area+' .sidebar-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>
