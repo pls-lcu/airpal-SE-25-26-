@@ -8,14 +8,12 @@ actor "Authenticated User" as Auth
 actor "Passenger" as Passenger
 actor "Ground Manager" as GM
 actor "Airport Administrator" as AirportAdmin
-actor "System Administrator" as SysAdmin
 actor "Weather Provider" as WeatherProvider
 actor "In-house Weather Station" as WeatherStation
 
 Passenger -|> Auth
 GM -|> Auth
 AirportAdmin -|> Auth
-SysAdmin -|> Auth
 
 rectangle "Monitoring & System Feedback" {
   usecase "Report a Bug" as UC16
@@ -31,7 +29,7 @@ Passenger --> UC15
 AirportAdmin --> UC17
 GM --> UC14
 GM --> UC15
-SysAdmin --> UC27
+AirportAdmin --> UC27
 WeatherProvider --> UC27
 WeatherStation --> UC27
 

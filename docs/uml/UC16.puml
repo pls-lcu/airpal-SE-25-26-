@@ -4,14 +4,14 @@ autonumber
 actor "Passenger" as Passenger
 participant "System" as Sys
 database "Airport Database" as DB
-actor "System Administrator" as SystemAdministrator
+actor "Airport Administrator" as AirportAdministrator
 
 Passenger -> Sys : Click "Report a bug"
 Sys -> Passenger : Request bug information
 Passenger -> Sys : Submit bug details
 Sys -> DB : Create bug ticket
 DB --> Sys : Ticket saved
-Sys -> SystemAdministrator : Notify bug report
+Sys -> AirportAdministrator : Notify bug report
 Sys -> Passenger : Display success message
 
 @enduml

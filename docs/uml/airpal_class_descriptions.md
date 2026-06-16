@@ -54,21 +54,13 @@ Abstract base for all employees working for an airline rather than the airport. 
 
 ---
 
-### `SystemAdministrator` *(extends AirportStaff)*
-Manages the technical infrastructure and user accounts of the platform.
+### `AirportAdministrator` *(extends AirportStaff)*
+Oversees airport-level operations including schedules, customer support, user management, and system feedback.
 
 | Element | Detail |
 |---|---|
 | `createWorkerAccount()` | Creates accounts for new staff members — UC25 |
 | `receiveBugReport()` | Receives and reviews submitted bug tickets — UC16 |
-
----
-
-### `AirportAdministrator` *(extends AirportStaff)*
-Oversees airport-level operations including schedules and customer support.
-
-| Element | Detail |
-|---|---|
 | `updateSchedule()` | Applies changes to the flight schedule — UC23 |
 | `receiveCustomerSupportTicket()` | Handles support issues escalated from passengers — UC17 |
 
@@ -238,7 +230,7 @@ Created when a user reports a technical issue with the system.
 |---|---|
 | `bugID` | Auto-generated report identifier |
 | `description` | User-submitted description of the issue |
-| `create()` | Submits the report and notifies SystemAdministrator — UC16 |
+| `create()` | Submits the report and notifies AirportAdministrator — UC16 |
 
 ---
 

@@ -6,12 +6,10 @@ title Identity & Access Management
 ' Actor generalization hierarchy
 actor "Unauthenticated User" as Unauth
 actor "Authenticated User" as Auth
-actor "System Administrator" as SysAdmin
 actor "Ground Manager" as GM
 actor "Airport Administrator" as AirportAdmin
 
 Unauth -|> Auth
-SysAdmin -|> Auth
 GM -|> Auth
 AirportAdmin -|> Auth
 
@@ -32,7 +30,7 @@ Auth --> UC03
 Auth --> UC04
 Auth --> UC05
 Auth --> UC12
-SysAdmin --> UC25
+AirportAdmin --> UC25
 GM --> UC24
 
 @enduml

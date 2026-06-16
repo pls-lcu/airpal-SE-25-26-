@@ -48,12 +48,9 @@ package "Identity_Access_Management" {
     + performAssignedTask()
   }
 
-  class SystemAdministrator {
+  class AirportAdministrator {
     + createWorkerAccount()
     + receiveBugReport()
-  }
-
-  class AirportAdministrator {
     + updateSchedule()
     + receiveCustomerSupportTicket()
   }
@@ -80,7 +77,6 @@ package "Identity_Access_Management" {
   User <|-- Passenger
   User <|-- AirportStaff
   User <|-- AirlineStaff
-  AirportStaff <|-- SystemAdministrator
   AirportStaff <|-- AirportAdministrator
   AirportStaff <|-- GroundManager
   AirportStaff <|-- GroundStaff
@@ -211,7 +207,7 @@ AirPal "1" o-- "0..*" Booking
 Passenger "1" -- "0..*" Booking : places >
 FlightCrew "0..*" -- "0..*" Flight : assignedCrew >
 
-SystemAdministrator "1" -- "0..*" BugReport : manages >
+AirportAdministrator "1" -- "0..*" BugReport : manages >
 AirportAdministrator "1" -- "0..*" CustomerSupportTicket : handles >
 GroundManager "1" -- "0..*" LostItemReport : handles >
 GroundManager "1" -- "0..*" AssistanceRequest : handles >

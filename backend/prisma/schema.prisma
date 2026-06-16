@@ -13,7 +13,6 @@ datasource db {
 
 enum UserType {
   PASSENGER
-  SYSTEM_ADMIN
   AIRPORT_ADMIN
   GROUND_MANAGER
   GROUND_STAFF
