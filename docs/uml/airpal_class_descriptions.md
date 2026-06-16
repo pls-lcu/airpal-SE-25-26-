@@ -161,6 +161,7 @@ A physical departure or arrival gate at the airport.
 |---|---|
 | `gateID` | Gate label (e.g. "B12") |
 | `terminal` | Terminal containing this gate |
+| `carousel` | Baggage carousel assigned to this gate (e.g. "C4") — used by UC11 |
 | `assignToFlight()` | Associates the gate with a specific flight — UC22 |
 
 ---

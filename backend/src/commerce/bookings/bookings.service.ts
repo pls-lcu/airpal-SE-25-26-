@@ -204,4 +204,40 @@ export class BookingsService {
       orderBy: { createdAt: 'desc' },
     });
   }
+
+  // ─────────────────────────────────────────
+  // UC12 — Access passenger dashboard
+  //
+  // Returns all bookings for the logged-in passenger with full flight details:
+  // gate, carousel, schedule status, and per-ticket check-in state.
+  //   GET /api/bookings/dashboard
+  // ─────────────────────────────────────────
+
+  async dashboard(passengerId: number) {
+    const bookings = await this.prisma.booking.findMany({
+      where: { passengerId },
+      include: {
+        tickets: true,
+        flight: {
+          include: {
+            schedule: true,
+            gate: true,
+            aircraft: true,
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    // Split into upcoming and past based on departure time
+    const now = new Date();
+    const upcoming = bookings.filter(
+      (b) => b.flight.departureTime > now && b.status !== 'CANCELLED',
+    );
+    const past = bookings.filter(
+      (b) => b.flight.departureTime <= now || b.status === 'CANCELLED',
+    );
+
+    return { upcoming, past };
+  }
 }

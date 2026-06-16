@@ -132,6 +132,7 @@ model Gate {
   id       Int      @id @default(autoincrement())
   gateID   String   @unique
   terminal String
+  carousel String?  // baggage carousel assigned to this gate (e.g. "C4")
   flights  Flight[]
 }
 

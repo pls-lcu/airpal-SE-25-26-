@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { SchedulingEngineStub } from '../../common/stubs/scheduling-engine.stub';
 import { CreateFlightDto } from './dto/create-flight.dto';
@@ -66,5 +66,64 @@ export class FlightsService {
       },
       orderBy: { departureTime: 'asc' }, // earliest flights first
     });
+  }
+
+  // ─────────────────────────────────────────
+  // UC10 — Find the departure gate for a flight
+  //
+  //   GET /api/flights/:flightNo/gate
+  // ─────────────────────────────────────────
+
+  async findGate(flightNo: string) {
+    const flight = await this.prisma.flight.findUnique({
+      where: { flightNo: flightNo.toUpperCase() },
+      include: { gate: true },
+    });
+
+    if (!flight) {
+      throw new NotFoundException(`Flight ${flightNo} not found`);
+    }
+
+    if (!flight.gate) {
+      throw new NotFoundException(`No gate assigned to flight ${flightNo} yet`);
+    }
+
+    return {
+      flightNo: flight.flightNo,
+      origin: flight.origin,
+      destination: flight.destination,
+      departureTime: flight.departureTime,
+      gate: flight.gate,
+    };
+  }
+
+  // ─────────────────────────────────────────
+  // UC11 — Find the baggage carousel for an arriving flight
+  //
+  //   GET /api/flights/:flightNo/carousel
+  // ─────────────────────────────────────────
+
+  async findCarousel(flightNo: string) {
+    const flight = await this.prisma.flight.findUnique({
+      where: { flightNo: flightNo.toUpperCase() },
+      include: { gate: true },
+    });
+
+    if (!flight) {
+      throw new NotFoundException(`Flight ${flightNo} not found`);
+    }
+
+    if (!flight.gate || !flight.gate.carousel) {
+      throw new NotFoundException(`No baggage carousel assigned to flight ${flightNo} yet`);
+    }
+
+    return {
+      flightNo: flight.flightNo,
+      origin: flight.origin,
+      destination: flight.destination,
+      arrivalTime: flight.arrivalTime,
+      carousel: flight.gate.carousel,
+      terminal: flight.gate.terminal,
+    };
   }
 }

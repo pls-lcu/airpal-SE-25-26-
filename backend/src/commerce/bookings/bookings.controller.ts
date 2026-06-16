@@ -15,10 +15,16 @@ export class BookingsController {
     return this.bookingsService.create(dto, user.id);
   }
 
-  /** UC08 — List active bookings */
+  /** UC08 — List all bookings */
   @Get()
   findMine(@CurrentUser() user: { id: number }) {
     return this.bookingsService.findByPassenger(user.id);
+  }
+
+  /** UC12 — Passenger dashboard (upcoming + past bookings with gate and schedule info) */
+  @Get('dashboard')
+  dashboard(@CurrentUser() user: { id: number }) {
+    return this.bookingsService.dashboard(user.id);
   }
 
   /** UC08 — Modify a booking */

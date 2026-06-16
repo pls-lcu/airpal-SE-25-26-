@@ -39,20 +39,20 @@ async function main() {
 
   const gateA1 = await prisma.gate.upsert({
     where: { gateID: 'A1' },
-    update: {},
-    create: { gateID: 'A1', terminal: 'Terminal 1' },
+    update: { carousel: 'C1' },
+    create: { gateID: 'A1', terminal: 'Terminal 1', carousel: 'C1' },
   });
 
   const gateB3 = await prisma.gate.upsert({
     where: { gateID: 'B3' },
-    update: {},
-    create: { gateID: 'B3', terminal: 'Terminal 2' },
+    update: { carousel: 'C3' },
+    create: { gateID: 'B3', terminal: 'Terminal 2', carousel: 'C3' },
   });
 
   const gateC7 = await prisma.gate.upsert({
     where: { gateID: 'C7' },
-    update: {},
-    create: { gateID: 'C7', terminal: 'Terminal 3' },
+    update: { carousel: 'C7' },
+    create: { gateID: 'C7', terminal: 'Terminal 3', carousel: 'C7' },
   });
 
   console.log('✓ Gates seeded');
