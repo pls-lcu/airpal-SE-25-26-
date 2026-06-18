@@ -1,0 +1,1078 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f0f6ff;font-size:14px}
+.app{min-height:600px}
+.screen{display:none}
+.screen.active{display:block}
+
+.nav{background:linear-gradient(90deg,#fff 0%,#cce8ff 60%,#90c8f0 100%);border-bottom:1px solid #b3d9f5;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:52px;gap:10px}
+.nav-logo{font-size:20px;font-weight:700;color:#0a3d8f;letter-spacing:-.3px;white-space:nowrap}
+.nav-links{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.nbtn{background:rgba(255,255,255,.7);border:1px solid #90bfe8;color:#1565c0;padding:5px 12px;border-radius:20px;font-size:12px;cursor:pointer;white-space:nowrap}
+.nbtn:hover{background:#fff}
+.nbtn.p{background:#1565c0;border-color:#1565c0;color:#fff}
+.nbtn.p:hover{background:#1976d2}
+.nbtn.red{background:#dc2626;border-color:#dc2626;color:#fff}
+.nav-role{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600}
+.role-pax{background:#e3f0ff;color:#0c447c}
+.role-ground{background:#fff7e0;color:#8a5c00}
+.role-admin{background:#fcebeb;color:#a32d2d}
+
+.hero{position:relative;overflow:hidden;padding:2.5rem 1.5rem 3.5rem;color:#fff;text-align:center;min-height:300px}
+.sky{position:absolute;inset:0;background:linear-gradient(180deg,#1a6fc4 0%,#3a9ad9 40%,#7ec8f0 75%,#c2e8fb 100%)}
+.cloud{position:absolute;background:rgba(255,255,255,.88);border-radius:50px}
+.c1{width:110px;height:32px;top:15%;left:5%;box-shadow:0 0 0 12px rgba(255,255,255,.35)}
+.c1::before{content:'';position:absolute;width:55px;height:45px;background:rgba(255,255,255,.88);border-radius:50%;top:-20px;left:16px}
+.c2{width:80px;height:24px;top:30%;right:8%;box-shadow:0 0 0 9px rgba(255,255,255,.3)}
+.c2::before{content:'';position:absolute;width:40px;height:34px;background:rgba(255,255,255,.88);border-radius:50%;top:-14px;left:10px}
+.c3{width:60px;height:20px;top:10%;left:52%;box-shadow:0 0 0 7px rgba(255,255,255,.25)}
+.hcontent{position:relative;z-index:2}
+.hcontent h1{font-size:28px;font-weight:500;margin-bottom:6px;text-shadow:0 1px 6px rgba(0,0,0,.18)}
+.hcontent p{font-size:14px;color:#dff0fb;margin-bottom:1.5rem}
+
+.scard{background:rgba(255,255,255,.97);border-radius:14px;padding:1.25rem;max-width:660px;margin:0 auto;box-shadow:0 6px 24px rgba(10,61,143,.18)}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.sf label{font-size:10px;color:#5f7fa8;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:3px}
+.sf input,.sf select{width:100%;border:1.5px solid #d0e1f5;border-radius:7px;padding:8px 10px;font-size:13px;color:#0a3d8f;outline:none;background:#fff}
+.sf input:focus{border-color:#1976d2}
+.sdiv{height:1px;background:#e8f0fb;margin:4px 0 10px}
+.sbot{display:flex;align-items:center;gap:8px}
+.sbot select{border:1.5px solid #d0e1f5;border-radius:7px;padding:6px 9px;color:#0a3d8f;font-size:12px;background:#fff}
+
+.gstrip{background:#e3f0ff;border-top:1px solid #b3d4f7;padding:9px 1.5rem;display:flex;align-items:center;gap:9px}
+.gpill{background:#fff;border:1px solid #b3d4f7;border-radius:20px;padding:3px 11px;font-size:12px;color:#0a3d8f;cursor:pointer}
+.gpill:hover{background:#d0e8ff}
+
+.qgrid{padding:1.25rem 1.5rem;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:900px;margin:0 auto}
+.qcard{background:#fff;border-radius:12px;border:.5px solid #c9dff7;padding:1rem;cursor:pointer}
+.qcard:hover{border-color:#1976d2;box-shadow:0 2px 10px rgba(25,118,210,.1)}
+.qcard p:first-of-type{font-size:13px;font-weight:600;color:#0a3d8f;margin:8px 0 3px}
+.qcard p:last-of-type{font-size:11px;color:#5f7fa8}
+
+.page{padding:1.25rem 1.5rem}
+.phdr{display:flex;align-items:center;gap:10px;margin-bottom:1.1rem;flex-wrap:wrap}
+.ptitle{font-size:16px;font-weight:600;color:#0a3d8f}
+.psub{font-size:12px;color:#5f7fa8;margin-left:auto}
+.bbtn{background:transparent;border:1px solid #b3d4f7;color:#1565c0;border-radius:20px;padding:4px 12px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.bbtn:hover{background:#e3f0ff}
+
+.card{background:#fff;border:.5px solid #c9dff7;border-radius:12px;padding:1rem 1.1rem;margin-bottom:10px}
+.ctitle{font-size:14px;font-weight:600;color:#0a3d8f;margin-bottom:.7rem}
+.irow{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-top:.5px solid #e8f0fb;color:#3d5a80}
+.irow:first-of-type{border-top:none}
+.irow span:last-child{color:#0a3d8f;font-weight:500}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.alert{border-radius:9px;padding:10px 14px;font-size:13px;margin-bottom:10px;display:flex;align-items:flex-start;gap:8px}
+.ag{background:#eaf3de;border:1px solid #a3d18a;color:#2d6e10}
+.ar{background:#fcebeb;border:1px solid #f09595;color:#a32d2d}
+.ab{background:#e3f0ff;border:1px solid #90bfe8;color:#0c447c}
+.aa{background:#fff7e0;border:1px solid #e5c87a;color:#8a5c00}
+.hidden{display:none!important}
+
+.badge{font-size:11px;padding:2px 9px;border-radius:20px;font-weight:600;display:inline-block}
+.bg{background:#eaf3de;color:#3b6d11}
+.bb{background:#e3f0ff;color:#0c447c}
+.br{background:#fcebeb;color:#a32d2d}
+.ba{background:#fff7e0;color:#8a5c00}
+.bgy{background:#f0f0f0;color:#555}
+
+.fg{margin-bottom:11px}
+.fg label{font-size:11px;color:#5f7fa8;display:block;margin-bottom:3px}
+.fg input,.fg select,.fg textarea{width:100%;border:1.5px solid #d0e1f5;border-radius:7px;padding:8px 10px;font-size:13px;color:#0a3d8f;outline:none;background:#fff}
+.fg input:focus,.fg select:focus{border-color:#1976d2}
+.fg textarea{resize:vertical;min-height:65px}
+
+.btn{border:none;border-radius:9px;padding:9px 22px;font-size:13px;cursor:pointer;font-weight:500}
+.btn-p{background:#1565c0;color:#fff}
+.btn-p:hover{background:#1976d2}
+.btn-s{background:#15803d;color:#fff}
+.btn-s:hover{background:#16a34a}
+.btn-d{background:#dc2626;color:#fff}
+.btn-d:hover{background:#b91c1c}
+.btn-o{background:#fff;color:#1565c0;border:1.5px solid #1565c0;border-radius:9px;padding:8px 18px;font-size:13px;cursor:pointer}
+.btn-o:hover{background:#e3f0ff}
+.btn-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.btn-full{width:100%;margin-top:8px}
+
+.fc{background:#fff;border:.5px solid #c9dff7;border-radius:12px;padding:.85rem 1rem;margin-bottom:9px;display:flex;align-items:center;gap:.9rem;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.fc:hover,.fc.sel{border-color:#1976d2;box-shadow:0 2px 10px rgba(25,118,210,.12)}
+.fc.sel{background:#f0f8ff}
+.fico{width:36px;height:36px;border-radius:8px;background:#e3f0ff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.fr-route{font-size:15px;font-weight:500;color:#0a3d8f}
+.fr-meta{font-size:11px;color:#7a98b8;margin-top:2px}
+.fr-price{font-size:18px;font-weight:600;color:#1565c0;text-align:right}
+.fr-pl{font-size:10px;color:#7a98b8}
+.fsel{background:#1565c0;color:#fff;border:none;border-radius:7px;padding:5px 14px;font-size:12px;cursor:pointer;margin-top:4px}
+.fsel:hover{background:#1976d2}
+
+.dgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
+.dcard{background:#fff;border:.5px solid #c9dff7;border-radius:12px;padding:1rem;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.dcard:hover{border-color:#1976d2;box-shadow:0 2px 10px rgba(25,118,210,.1)}
+.dico{width:38px;height:38px;border-radius:9px;background:#e3f0ff;display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:8px}
+.dcard p:first-of-type{font-size:13px;font-weight:600;color:#0a3d8f}
+.dcard p:last-of-type{font-size:11px;color:#5f7fa8;margin-top:2px}
+
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{background:#f0f6ff;color:#5f7fa8;font-size:10px;text-transform:uppercase;letter-spacing:.04em;padding:7px 9px;text-align:left;border-bottom:1px solid #e0eaf8}
+.tbl td{padding:8px 9px;border-bottom:.5px solid #edf3fb;color:#0a3d8f}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:#f7fbff}
+
+.bp{background:linear-gradient(135deg,#1565c0,#1976d2);border-radius:14px;padding:1.25rem;color:#fff;margin-bottom:10px;position:relative;overflow:hidden}
+.bp::before{content:'';position:absolute;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.07);top:-20px;right:-20px}
+.bp-route{font-size:26px;font-weight:700;letter-spacing:2px;margin-bottom:10px}
+.bp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.bp-f label{font-size:9px;opacity:.7;display:block;margin-bottom:1px}
+.bp-f span{font-size:13px;font-weight:500}
+.bp-div{border:none;border-top:1.5px dashed rgba(255,255,255,.35);margin:8px 0}
+.bcode{display:flex;align-items:center;justify-content:center;gap:2px;padding:6px 0}
+.bbar{border-radius:1px;background:rgba(255,255,255,.8)}
+
+.wx{background:linear-gradient(135deg,#0a3d8f,#1565c0);color:#fff;border-radius:12px;padding:1rem 1.25rem;margin-bottom:10px}
+.wx-temp{font-size:36px;font-weight:300}
+.wx-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.wx-item label{font-size:9px;opacity:.7;display:block}
+.wx-item span{font-size:12px;font-weight:500}
+
+/* DEMO CARDS */
+.demo-label{font-size:11px;color:#5f7fa8;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.demo-card{background:#f7fbff;border:1.5px solid #d0e1f5;border-radius:11px;padding:12px 14px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:border-color .15s,background .15s}
+.demo-card:hover{border-color:#1565c0;background:#e8f4ff}
+.demo-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;font-weight:700;color:#fff}
+.demo-icon.pax{background:linear-gradient(135deg,#1565c0,#1976d2)}
+.demo-icon.gnd{background:linear-gradient(135deg,#b45309,#d97706)}
+.demo-icon.adm{background:linear-gradient(135deg,#991b1b,#dc2626)}
+.demo-info{flex:1;min-width:0}
+.demo-name{font-size:13px;font-weight:600;color:#0a3d8f}
+.demo-creds{font-size:11px;color:#5f7fa8;font-family:monospace;margin-top:2px;word-break:break-all}
+.demo-badge{font-size:10px;padding:2px 9px;border-radius:20px;font-weight:600;white-space:nowrap;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ══ HOME ══ -->
+<div class="screen active" id="s-home">
+  <nav class="nav">
+    <span class="nav-logo">AirPal</span>
+    <div class="nav-links" id="nav-home">
+      <button class="nbtn" onclick="go('s-gates')">🚪 Gate finder</button>
+      <button class="nbtn" onclick="go('s-weather')">🌤 Weather</button>
+      <button class="nbtn p" onclick="go('s-login')">Login / Register</button>
+    </div>
+  </nav>
+  <div class="hero">
+    <div class="sky"></div>
+    <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+    <div class="hcontent">
+      <h1>Where do you want to fly?</h1>
+      <p>Search hundreds of airlines and routes — all in one place.</p>
+      <div class="scard">
+        <div class="sgrid">
+          <div class="sf"><label>From</label><input type="text" value="Rome (FCO)"/></div>
+          <div class="sf"><label>To</label><input type="text" placeholder="Destination…"/></div>
+        </div>
+        <div class="sgrid">
+          <div class="sf"><label>Depart</label><input type="date" value="2026-07-10"/></div>
+          <div class="sf"><label>Return</label><input type="date" value="2026-07-17"/></div>
+        </div>
+        <div class="sdiv"></div>
+        <div class="sbot">
+          <select><option>1 passenger</option><option>2 passengers</option><option>3 passengers</option></select>
+          <select><option>Economy</option><option>Business</option><option>First</option></select>
+          <button class="btn btn-p" style="margin-left:auto" onclick="go('s-results')">Search flights →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="gstrip">
+    <span style="font-size:13px;color:#1565c0;font-weight:500">🔴 Live:</span>
+    <div class="gpill">Gate B12 — On time</div>
+    <div class="gpill">Gate A4 — Boarding</div>
+    <button style="margin-left:auto;background:transparent;border:1px solid #1565c0;color:#1565c0;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer" onclick="go('s-gates')">View all →</button>
+  </div>
+  <div class="qgrid">
+    <div class="qcard" onclick="go('s-results')"><span style="font-size:22px">✈️</span><p>Popular routes</p><p>FCO → LHR, CDG, JFK and more</p></div>
+    <div class="qcard" onclick="go('s-results')"><span style="font-size:22px">🏷</span><p>Deals this week</p><p>Flash fares from €49 one-way</p></div>
+    <div class="qcard" onclick="go('s-gates')"><span style="font-size:22px">🗺</span><p>Airport map</p><p>Real-time gate status</p></div>
+  </div>
+</div>
+
+<!-- ══ LOGIN ══ -->
+<div class="screen" id="s-login">
+  <nav class="nav">
+    <span class="nav-logo">AirPal</span>
+    <div class="nav-links"><button class="nbtn" onclick="go('s-home')">← Home</button></div>
+  </nav>
+  <div class="page" style="display:flex;justify-content:center;padding-top:1.25rem">
+    <div style="width:100%;max-width:440px">
+
+      <div class="card" style="margin-bottom:10px">
+        <div class="ctitle">Sign in</div>
+        <div id="login-err" class="alert ar hidden"></div>
+        <div class="fg"><label>Email</label><input id="lem" type="email" placeholder="e.g. t.law@airpal.com"/></div>
+        <div class="fg"><label>Password</label><input id="lpw" type="password" placeholder="••••••••"/></div>
+        <button class="btn btn-p btn-full" onclick="doEmailLogin()">Sign in</button>
+        <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:12px">
+          <a style="color:#1565c0;cursor:pointer" onclick="go('s-reset-req')">Forgot password?</a>
+          <a style="color:#1565c0;cursor:pointer" onclick="go('s-register')">Create account</a>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:10px;margin:6px 0 10px">
+        <div style="flex:1;height:1px;background:#dde8f5"></div>
+        <span style="font-size:12px;color:#5f7fa8">or continue as</span>
+        <div style="flex:1;height:1px;background:#dde8f5"></div>
+      </div>
+
+      <div class="demo-label">Demo accounts — click to sign in instantly</div>
+
+      <div class="demo-card" onclick="fillAndLogin('t.law@airpal.com','Law1234!','passenger')">
+        <div class="demo-icon pax">TL</div>
+        <div class="demo-info">
+          <div class="demo-name">Trafalgar Law</div>
+          <div class="demo-creds">t.law@airpal.com &nbsp;·&nbsp; Law1234!</div>
+        </div>
+        <span class="demo-badge role-pax">Passenger</span>
+      </div>
+
+      <div class="demo-card" onclick="fillAndLogin('l.paloschi@airpal.com','Ground99#','ground')">
+        <div class="demo-icon gnd">LP</div>
+        <div class="demo-info">
+          <div class="demo-name">Luca Paloschi</div>
+          <div class="demo-creds">l.paloschi@airpal.com &nbsp;·&nbsp; Ground99#</div>
+        </div>
+        <span class="demo-badge role-ground">Ground Manager</span>
+      </div>
+
+      <div class="demo-card" onclick="fillAndLogin('p.awal@airpal.com','Admin00@','admin')">
+        <div class="demo-icon adm">PA</div>
+        <div class="demo-info">
+          <div class="demo-name">Primia Awal</div>
+          <div class="demo-creds">p.awal@airpal.com &nbsp;·&nbsp; Admin00@</div>
+        </div>
+        <span class="demo-badge role-admin">Administrator</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ REGISTER ══ -->
+<div class="screen" id="s-register">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-login')">← Login</button></div></nav>
+  <div class="page" style="display:flex;justify-content:center;padding-top:1.5rem">
+    <div class="card" style="max-width:420px;width:100%">
+      <div class="ctitle">Create account</div>
+      <div id="reg-err" class="alert ar hidden"></div>
+      <div class="r2">
+        <div class="fg"><label>First name</label><input id="rfn" type="text" placeholder="Trafalgar"/></div>
+        <div class="fg"><label>Last name</label><input id="rln" type="text" placeholder="Law"/></div>
+      </div>
+      <div class="fg"><label>Email</label><input id="rem" type="email" placeholder="t.law@example.com"/></div>
+      <div class="fg"><label>Password <span style="font-size:10px;color:#aaa">(8+ chars, upper, lower, digit, special)</span></label><input id="rpw" type="password" placeholder="••••••••"/></div>
+      <div class="fg"><label>Date of birth</label><input type="date"/></div>
+      <div class="fg"><label>Phone (optional)</label><input type="tel" placeholder="+39 333 000 0000"/></div>
+      <button class="btn btn-p btn-full" onclick="doRegister()">Register</button>
+      <p style="text-align:center;margin-top:10px;font-size:12px;color:#5f7fa8">Already have an account? <a style="color:#1565c0;cursor:pointer" onclick="go('s-login')">Sign in</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RESET ══ -->
+<div class="screen" id="s-reset-req">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-login')">← Login</button></div></nav>
+  <div class="page" style="display:flex;justify-content:center;padding-top:2rem">
+    <div class="card" style="max-width:380px;width:100%">
+      <div class="ctitle">Reset password</div>
+      <div class="alert ab">Enter your email and we'll send a reset link.</div>
+      <div class="fg"><label>Email</label><input type="email" placeholder="t.law@airpal.com"/></div>
+      <button class="btn btn-p btn-full" onclick="go('s-reset-done')">Send reset link</button>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-reset-done">
+  <nav class="nav"><span class="nav-logo">AirPal</span></nav>
+  <div class="page" style="display:flex;justify-content:center;padding-top:2rem">
+    <div class="card" style="max-width:380px;width:100%">
+      <div class="alert ag">Reset link sent! Check your inbox.</div>
+      <button class="btn btn-p btn-full" onclick="go('s-login')">Back to login</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RESULTS ══ -->
+<div class="screen" id="s-results">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links" id="nav-results"></div></nav>
+  <div class="page">
+    <div class="phdr">
+      <button class="bbtn" onclick="go('s-home')">← Back</button>
+      <span class="ptitle">Flights · FCO → LHR</span>
+      <span class="psub">10 Jul 2026 · 1 pax · Economy</span>
+    </div>
+    <div class="fc" id="fc1" onclick="pickFlight(this,'AZ 204','FCO → LHR','08:15','10:50','ITA Airways · 2h 35m · Non-stop','€189')">
+      <div class="fico">✈</div>
+      <div style="flex:1"><div class="fr-route">08:15 → 10:50 &nbsp;<span style="font-size:12px;color:#5f7fa8">FCO → LHR</span></div><div class="fr-meta">ITA Airways · 2h 35m · Non-stop</div></div>
+      <div style="text-align:center;font-size:10px;color:#3b6d11">●<br>Direct</div>
+      <div style="text-align:right"><div class="fr-price">€189</div><div class="fr-pl">per pax</div><button class="fsel">Select</button></div>
+    </div>
+    <div class="fc" id="fc2" onclick="pickFlight(this,'FR 8821','FCO → LHR','11:40','16:05','Ryanair · 4h 25m · 1 stop','€94')">
+      <div class="fico">✈</div>
+      <div style="flex:1"><div class="fr-route">11:40 → 16:05 &nbsp;<span style="font-size:12px;color:#5f7fa8">FCO → LHR</span></div><div class="fr-meta">Ryanair · 4h 25m · 1 stop (MXP)</div></div>
+      <div style="text-align:center;font-size:10px;color:#5f7fa8">○<br>1 stop</div>
+      <div style="text-align:right"><div class="fr-price">€94</div><div class="fr-pl">per pax</div><button class="fsel">Select</button></div>
+    </div>
+    <div class="fc" id="fc3" onclick="pickFlight(this,'BA 564','FCO → JFK','14:45','17:00','British Airways · Non-stop','€634')">
+      <div class="fico">✈</div>
+      <div style="flex:1"><div class="fr-route">14:45 → 17:00 &nbsp;<span style="font-size:12px;color:#5f7fa8">FCO → JFK</span></div><div class="fr-meta">British Airways · Non-stop</div></div>
+      <div style="text-align:center;font-size:10px;color:#3b6d11">●<br>Direct</div>
+      <div style="text-align:right"><div class="fr-price">€634</div><div class="fr-pl">per pax</div><button class="fsel">Select</button></div>
+    </div>
+    <div class="fc" id="fc4" onclick="pickFlight(this,'U2 3342','FCO → LHR','18:55','21:30','easyJet · 2h 35m · Non-stop','€112')">
+      <div class="fico">✈</div>
+      <div style="flex:1"><div class="fr-route">18:55 → 21:30 &nbsp;<span style="font-size:12px;color:#5f7fa8">FCO → LHR</span></div><div class="fr-meta">easyJet · 2h 35m · Non-stop</div></div>
+      <div style="text-align:center;font-size:10px;color:#3b6d11">●<br>Direct</div>
+      <div style="text-align:right"><div class="fr-price">€112</div><div class="fr-pl">per pax</div><button class="fsel">Select</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BOOK ══ -->
+<div class="screen" id="s-book">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-results')">← Back</button><span class="nav-role role-pax">Passenger</span></div></nav>
+  <div class="page">
+    <div class="phdr"><span class="ptitle">Book ticket</span></div>
+    <div class="card">
+      <div style="background:#f0f6ff;border-radius:9px;padding:10px 12px;margin-bottom:12px">
+        <div class="irow"><span>Flight</span><span id="b-flight">—</span></div>
+        <div class="irow"><span>Route</span><span id="b-route">—</span></div>
+        <div class="irow"><span>Departs</span><span id="b-dep">—</span></div>
+        <div class="irow"><span>Arrives</span><span id="b-arr">—</span></div>
+        <div class="irow"><span>Base fare</span><span id="b-base">—</span></div>
+        <div class="irow"><span>Taxes & fees</span><span>€28</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:600;color:#0a3d8f;border-top:1px solid #c9dff7;padding-top:8px;margin-top:5px"><span>Total</span><span id="b-total">—</span></div>
+      </div>
+      <div class="fg"><label>Seat preference</label><select><option>Any</option><option>Window</option><option>Aisle</option><option>Extra legroom (+€30)</option></select></div>
+      <div class="fg"><label>Cardholder name</label><input id="cn" type="text" placeholder="Trafalgar Law"/></div>
+      <div class="fg"><label>Card number <span style="font-size:10px;color:#aaa">(end in 0000 to simulate failure)</span></label><input id="cnum" type="text" placeholder="4242 4242 4242 4242" maxlength="19"/></div>
+      <div class="r2">
+        <div class="fg"><label>Expiry</label><input type="text" placeholder="MM/YY"/></div>
+        <div class="fg"><label>CVV</label><input type="text" placeholder="123" maxlength="3"/></div>
+      </div>
+      <button class="btn btn-p btn-full" onclick="doPay()">🔒 Pay & confirm booking</button>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-book-ok">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn p" onclick="go('s-dashboard')">My Dashboard</button></div></nav>
+  <div class="page">
+    <div class="alert ag">✅ Booking confirmed!</div>
+    <div class="card">
+      <div class="irow"><span>Booking ref</span><span id="bref">AP-000000</span></div>
+      <div class="irow"><span>Flight</span><span id="bconf">—</span></div>
+      <div class="irow"><span>Status</span><span><span class="badge bg">Confirmed</span></span></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-o" onclick="go('s-checkin')">Go to check-in →</button>
+      <button class="btn btn-p" onclick="go('s-dashboard')">Dashboard</button>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-book-fail">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-book')">← Try again</button></div></nav>
+  <div class="page">
+    <div class="alert ar">❌ Payment failed — card declined.</div>
+    <div class="card"><p style="font-size:12px;color:#5f7fa8;line-height:1.7">• Check card number and expiry<br>• Ensure sufficient funds<br>• Try a different card</p></div>
+    <button class="btn btn-p" onclick="go('s-book')">Retry</button>
+  </div>
+</div>
+
+<!-- ══ MANAGE ══ -->
+<div class="screen" id="s-manage">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-dashboard')">← Dashboard</button><span class="nav-role role-pax">Passenger</span></div></nav>
+  <div class="page">
+    <div class="phdr"><span class="ptitle">Manage booking</span></div>
+    <div class="card">
+      <div class="irow"><span>Ref</span><span>AP-739201</span></div>
+      <div class="irow"><span>Flight</span><span>AZ 204 · FCO→LHR</span></div>
+      <div class="irow"><span>Date</span><span>10 Jul 2026 · 08:15</span></div>
+      <div class="irow"><span>Seat</span><span>14A</span></div>
+      <div class="irow"><span>Status</span><span><span class="badge bg">Confirmed</span></span></div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Modify seat</div>
+      <div class="fg"><label>New preference</label><select><option>Window</option><option>Aisle</option><option>Extra legroom</option></select></div>
+      <button class="btn btn-p" onclick="showToast('Seat updated successfully')">Save change</button>
+    </div>
+    <div class="card">
+      <div class="ctitle">Cancel booking</div>
+      <div class="alert aa">⚠ Cancellation is permanent.</div>
+      <button class="btn btn-d" onclick="go('s-cancel-done')">Cancel booking</button>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-cancel-done">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn p" onclick="go('s-dashboard')">Dashboard</button></div></nav>
+  <div class="page"><div class="alert ag">Booking cancelled successfully.</div><button class="btn btn-p" onclick="go('s-dashboard')">Back</button></div>
+</div>
+
+<!-- ══ CHECK-IN ══ -->
+<div class="screen" id="s-checkin">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-dashboard')">← Dashboard</button><span class="nav-role role-pax">Passenger</span></div></nav>
+  <div class="page">
+    <div class="phdr"><span class="ptitle">Online check-in</span></div>
+    <div class="card">
+      <div class="alert ab">ℹ Verify your travel document details match your booking exactly.</div>
+      <div class="fg"><label>Booking reference</label><input type="text" value="AP-739201"/></div>
+      <div class="r2">
+        <div class="fg"><label>First name</label><input id="ci-fn" type="text" placeholder="Trafalgar"/></div>
+        <div class="fg"><label>Last name</label><input id="ci-ln" type="text" placeholder="Law"/></div>
+      </div>
+      <div class="fg"><label>Passport / ID number</label><input id="ci-doc" type="text" placeholder="YA1234567"/></div>
+      <div class="fg"><label>Nationality</label><input type="text" placeholder="—"/></div>
+      <div class="fg"><label>Seat preference</label><select><option>Any available</option><option>Window</option><option>Aisle</option><option>Extra legroom</option></select></div>
+      <button class="btn btn-p btn-full" onclick="doCheckin()">Confirm & check in</button>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-bp">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn p" onclick="go('s-dashboard')">Dashboard</button></div></nav>
+  <div class="page">
+    <div class="alert ag">✅ Check-in complete — boarding pass ready</div>
+    <div class="bp">
+      <div style="font-size:12px;opacity:.8;margin-bottom:4px">AirPal · Economy Class</div>
+      <div class="bp-route">FCO → LHR</div>
+      <div class="bp-grid">
+        <div class="bp-f"><label>Passenger</label><span id="bp-name">—</span></div>
+        <div class="bp-f"><label>Flight</label><span>AZ 204</span></div>
+        <div class="bp-f"><label>Date</label><span>10 JUL</span></div>
+        <div class="bp-f"><label>Seat</label><span>14A</span></div>
+        <div class="bp-f"><label>Gate</label><span>B12</span></div>
+        <div class="bp-f"><label>Boards</label><span>07:45</span></div>
+        <div class="bp-f"><label>Departs</label><span>08:15</span></div>
+        <div class="bp-f"><label>Class</label><span>Y</span></div>
+      </div>
+      <div class="bp-div"></div>
+      <div class="bcode" id="bcode"></div>
+    </div>
+    <button class="btn btn-p btn-full">⬇ Download boarding pass</button>
+  </div>
+</div>
+
+<!-- ══ GATE FINDER ══ -->
+<div class="screen" id="s-gates">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links" id="nav-gates"></div></nav>
+  <div class="page">
+    <div class="phdr"><button class="bbtn" onclick="goBack()">← Back</button><span class="ptitle">Gate Finder</span><span class="psub">🔴 Live</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+      <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b style="color:#0a3d8f">Gate B12</b><span class="badge bb">Boarding</span></div><div class="irow"><span>Flight</span><span>AZ 204</span></div><div class="irow"><span>Dest</span><span>London LHR</span></div><div class="irow"><span>Departs</span><span>08:15</span></div></div>
+      <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b style="color:#0a3d8f">Gate A4</b><span class="badge bg">On time</span></div><div class="irow"><span>Flight</span><span>FR 8821</span></div><div class="irow"><span>Dest</span><span>Barcelona</span></div><div class="irow"><span>Departs</span><span>13:15</span></div></div>
+      <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b style="color:#0a3d8f">Gate C7</b><span class="badge bg">On time</span></div><div class="irow"><span>Flight</span><span>BA 564</span></div><div class="irow"><span>Dest</span><span>New York JFK</span></div><div class="irow"><span>Departs</span><span>14:45</span></div></div>
+      <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b style="color:#0a3d8f">Gate D2</b><span class="badge br">Closed</span></div><div class="irow"><span>Flight</span><span>U2 3342</span></div><div class="irow"><span>Dest</span><span>Paris CDG</span></div><div class="irow"><span>Departed</span><span>09:20 ✓</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BAGGAGE ══ -->
+<div class="screen" id="s-baggage">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-dashboard')">← Dashboard</button></div></nav>
+  <div class="page">
+    <div class="phdr"><span class="ptitle">Baggage Carousel Finder</span></div>
+    <div class="fg" style="max-width:280px"><label>Flight number</label><input type="text" value="AZ 204"/></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px">
+      <div class="card" style="text-align:center"><div style="font-size:28px;font-weight:700;color:#1565c0">3</div><div style="font-size:11px;color:#5f7fa8">Carousel</div><div class="badge bg" style="margin-top:4px">Active</div></div>
+      <div class="card" style="text-align:center"><div style="font-size:28px;font-weight:700;color:#0a3d8f">T1</div><div style="font-size:11px;color:#5f7fa8">Terminal</div></div>
+      <div class="card" style="text-align:center"><div style="font-size:18px;font-weight:700;color:#15803d">~12min</div><div style="font-size:11px;color:#5f7fa8">Est. wait</div></div>
+    </div>
+    <div class="card" style="margin-top:8px">
+      <div class="irow"><span>Flight</span><span>AZ 204 · FCO→LHR</span></div>
+      <div class="irow"><span>Landed</span><span>10:48</span></div>
+      <div class="irow"><span>Status</span><span><span class="badge bg">Bags loading</span></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PASSENGER DASHBOARD ══ -->
+<div class="screen" id="s-dashboard">
+  <nav class="nav">
+    <span class="nav-logo">AirPal</span>
+    <div class="nav-links">
+      <span class="nav-role role-pax">Passenger</span>
+      <button class="nbtn" onclick="go('s-settings')">Settings</button>
+      <button class="nbtn red" onclick="logout()">Sign out</button>
+    </div>
+  </nav>
+  <div class="page">
+    <div class="phdr"><span class="ptitle">My Dashboard</span><span class="psub" id="dash-welcome">Welcome back</span></div>
+    <div class="dgrid">
+      <div class="dcard" onclick="go('s-results')"><div class="dico">✈️</div><p>Search & book flights</p><p>Find and reserve your next trip</p></div>
+      <div class="dcard" onclick="go('s-checkin')"><div class="dico">🎫</div><p>Online check-in</p><p>Verify documents & get boarding pass</p></div>
+      <div class="dcard" onclick="go('s-gates')"><div class="dico">🚪</div><p>Gate finder</p><p>Live gate status & updates</p></div>
+      <div class="dcard" onclick="go('s-baggage')"><div class="dico">🧳</div><p>Baggage carousel</p><p>Find where your bags will arrive</p></div>
+      <div class="dcard" onclick="go('s-reports')"><div class="dico">📋</div><p>Reports & support</p><p>Lost items, assistance & help</p></div>
+      <div class="dcard" onclick="go('s-weather')"><div class="dico">🌤</div><p>Weather</p><p>Live airport conditions</p></div>
+    </div>
+    <div class="card">
+      <div class="ctitle">My bookings</div>
+      <table class="tbl">
+        <thead><tr><th>Ref</th><th>Flight</th><th>Route</th><th>Date</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>AP-739201</td><td>AZ 204</td><td>FCO→LHR</td><td>10 Jul</td><td><span class="badge bg">Confirmed</span></td><td><button class="fsel" onclick="go('s-manage')">Manage</button></td></tr>
+          <tr><td>AP-710045</td><td>U2 3342</td><td>FCO→CDG</td><td>18 Jul</td><td><span class="badge ba">Pending</span></td><td><button class="fsel" onclick="go('s-manage')">Manage</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SETTINGS ══ -->
+<div class="screen" id="s-settings">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-dashboard')">← Dashboard</button></div></nav>
+  <div class="page">
+    <div class="phdr"><span class="ptitle">Account settings</span></div>
+    <div class="card">
+      <div class="ctitle">Change password</div>
+      <div class="fg"><label>Current password</label><input type="password"/></div>
+      <div class="fg"><label>New password</label><input type="password"/></div>
+      <div class="fg"><label>Confirm</label><input type="password"/></div>
+      <button class="btn btn-p" onclick="showToast('Password updated successfully')">Update</button>
+    </div>
+    <div class="card">
+      <div class="ctitle">Delete account</div>
+      <div class="alert ar">⚠ This is permanent and cannot be undone.</div>
+      <button class="btn btn-d" onclick="logout()">Delete account</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ REPORTS ══ -->
+<div class="screen" id="s-reports">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-dashboard')">← Dashboard</button></div></nav>
+  <div class="page">
+    <div class="phdr"><span class="ptitle">Reports & support</span></div>
+    <div class="dgrid">
+      <div class="dcard" onclick="go('s-lost')"><div class="dico">🔍</div><p>Lost item report</p><p>Report something you left behind</p></div>
+      <div class="dcard" onclick="go('s-assist')"><div class="dico">♿</div><p>Special assistance</p><p>Request mobility or other support</p></div>
+      <div class="dcard" onclick="go('s-bug')"><div class="dico">🐛</div><p>Report a bug</p><p>Something not working right?</p></div>
+      <div class="dcard" onclick="go('s-support')"><div class="dico">🎧</div><p>Customer support</p><p>Open a support ticket</p></div>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-lost">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-reports')">← Back</button></div></nav>
+  <div class="page" style="max-width:480px"><div class="phdr"><span class="ptitle">Report lost item</span></div>
+    <div class="card">
+      <div class="fg"><label>Flight number</label><input type="text" placeholder="AZ 204"/></div>
+      <div class="fg"><label>Item description</label><textarea placeholder="e.g. Blue laptop bag, seat 14A…"></textarea></div>
+      <div class="fg"><label>Last seen location</label><input type="text" placeholder="Gate B12 / on board…"/></div>
+      <button class="btn btn-p btn-full" onclick="doReport('Lost item report submitted. Our team will be in touch.')">Submit</button>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-assist">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-reports')">← Back</button></div></nav>
+  <div class="page" style="max-width:480px"><div class="phdr"><span class="ptitle">Special assistance request</span></div>
+    <div class="card">
+      <div class="fg"><label>Assistance type</label><select><option>Wheelchair</option><option>Visual impairment</option><option>Hearing impairment</option><option>Other</option></select></div>
+      <div class="fg"><label>Flight number</label><input type="text" placeholder="AZ 204"/></div>
+      <div class="fg"><label>Notes</label><textarea placeholder="Any specific requirements…"></textarea></div>
+      <button class="btn btn-p btn-full" onclick="doReport('Assistance request submitted. Ground staff will meet you at check-in.')">Submit</button>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-bug">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-reports')">← Back</button></div></nav>
+  <div class="page" style="max-width:480px"><div class="phdr"><span class="ptitle">Report a bug</span></div>
+    <div class="card">
+      <div class="fg"><label>Summary</label><input type="text" placeholder="e.g. Search filter crashes on mobile"/></div>
+      <div class="fg"><label>Severity</label><select><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div>
+      <div class="fg"><label>Steps to reproduce</label><textarea placeholder="1. Open search&#10;2. Select dates&#10;3. Tap search…"></textarea></div>
+      <button class="btn btn-p btn-full" onclick="doReport('Bug report submitted. Thank you for helping us improve AirPal.')">Submit</button>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-support">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-reports')">← Back</button></div></nav>
+  <div class="page" style="max-width:480px"><div class="phdr"><span class="ptitle">Customer support</span></div>
+    <div class="card">
+      <div class="fg"><label>Subject</label><input type="text" placeholder="e.g. Refund not processed"/></div>
+      <div class="fg"><label>Booking reference (if applicable)</label><input type="text" placeholder="AP-739201"/></div>
+      <div class="fg"><label>Message</label><textarea placeholder="Describe your issue…"></textarea></div>
+      <button class="btn btn-p btn-full" onclick="doReport('Support ticket opened. We will respond within 24 hours.')">Open ticket</button>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-report-done">
+  <nav class="nav"><span class="nav-logo">AirPal</span></nav>
+  <div class="page">
+    <div class="alert ag" id="report-msg">✅ Submitted.</div>
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="go('s-reports')">Back to reports</button>
+      <button class="btn btn-o" onclick="go('s-dashboard')">Dashboard</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ WEATHER ══ -->
+<div class="screen" id="s-weather">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links" id="nav-wx"></div></nav>
+  <div class="page">
+    <div class="phdr"><button class="bbtn" onclick="goBack()">← Back</button><span class="ptitle">Airport Weather</span></div>
+    <div class="wx">
+      <div style="display:flex;justify-content:space-between">
+        <div><div style="font-size:13px;opacity:.8;margin-bottom:4px">Rome Fiumicino (FCO)</div><div class="wx-temp">22°C</div><div style="font-size:14px;opacity:.8">☀ Clear skies</div></div>
+        <div style="font-size:11px;opacity:.7;text-align:right">Updated 5 min ago</div>
+      </div>
+      <div class="wx-grid">
+        <div class="wx-item"><label>Wind</label><span>14 km/h NW</span></div>
+        <div class="wx-item"><label>Visibility</label><span>10+ km</span></div>
+        <div class="wx-item"><label>Humidity</label><span>48%</span></div>
+        <div class="wx-item"><label>Pressure</label><span>1018 hPa</span></div>
+        <div class="wx-item"><label>Ceiling</label><span>FEW 3000ft</span></div>
+        <div class="wx-item"><label>METAR</label><span>CAVOK</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="irow"><span>Runway 16L/34R</span><span><span class="badge bg">Operational</span></span></div>
+      <div class="irow"><span>Ground ops</span><span><span class="badge bg">Normal</span></span></div>
+      <div class="irow"><span>Weather alerts</span><span><span class="badge bgy">None</span></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ GROUND MANAGER ══ -->
+<div class="screen" id="s-ground">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><span class="nav-role role-ground">Ground Manager</span><button class="nbtn red" onclick="logout()">Sign out</button></div></nav>
+  <div class="page">
+    <div class="phdr"><span class="ptitle">Ground Manager Dashboard</span><span class="psub" id="ground-welcome">Luca Paloschi</span></div>
+    <div class="dgrid">
+      <div class="dcard" onclick="go('s-gates-mgr')"><div class="dico">🚪</div><p>Gate assignment</p><p>Assign gates to flights</p></div>
+      <div class="dcard" onclick="go('s-aircraft')"><div class="dico">✈️</div><p>Update aircraft status</p><p>Landed, taxiing, at gate</p></div>
+      <div class="dcard" onclick="go('s-shifts')"><div class="dico">👷</div><p>Shift assignment</p><p>Manage ground staff shifts</p></div>
+      <div class="dcard" onclick="go('s-gates')"><div class="dico">📍</div><p>Live gate view</p><p>Read-only gate status</p></div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Today's flights</div>
+      <table class="tbl">
+        <thead><tr><th>Flight</th><th>Route</th><th>Time</th><th>Gate</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>AZ 204</td><td>FCO→LHR</td><td>08:15</td><td>B12</td><td><span class="badge bb">Boarding</span></td></tr>
+          <tr><td>FR 8821</td><td>FCO→BCN</td><td>13:15</td><td>A4</td><td><span class="badge bg">On time</span></td></tr>
+          <tr><td>BA 564</td><td>FCO→JFK</td><td>14:45</td><td>C7</td><td><span class="badge ba">Delayed</span></td></tr>
+          <tr><td>U2 3342</td><td>FCO→CDG</td><td>16:30</td><td>—</td><td><span class="badge bgy">Unassigned</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-gates-mgr">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-ground')">← Dashboard</button><span class="nav-role role-ground">Ground</span></div></nav>
+  <div class="page">
+    <div class="phdr"><span class="ptitle">Gate assignment</span></div>
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>Flight</th><th>Time</th><th>Gate</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>AZ 204</td><td>08:15</td><td>B12</td><td><button class="fsel" onclick="showGateForm('AZ 204')">Edit</button></td></tr>
+          <tr><td>FR 8821</td><td>13:15</td><td>A4</td><td><button class="fsel" onclick="showGateForm('FR 8821')">Edit</button></td></tr>
+          <tr><td>U2 3342</td><td>16:30</td><td>—</td><td><button class="fsel" onclick="showGateForm('U2 3342')">Assign</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card hidden" id="gate-form">
+      <div class="ctitle">Assign gate for <span id="gf-flight">—</span></div>
+      <div class="fg"><label>Select gate</label>
+        <select id="gate-pick">
+          <option value="ok">B14 — Available</option>
+          <option value="ok">C3 — Available</option>
+          <option value="conflict">A2 — ⚠ Conflict risk</option>
+          <option value="ok">D8 — Available</option>
+        </select>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-p" onclick="doAssignGate()">Confirm</button>
+        <button class="btn btn-o" onclick="document.getElementById('gate-form').classList.add('hidden')">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-gate-conflict">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-gates-mgr')">← Back</button></div></nav>
+  <div class="page"><div class="alert ar">⚠ Gate conflict — asset already assigned. Please choose another gate.</div><button class="btn btn-p" onclick="go('s-gates-mgr')">Try again</button></div>
+</div>
+<div class="screen" id="s-gate-ok">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn p" onclick="go('s-ground')">Dashboard</button></div></nav>
+  <div class="page">
+    <div class="alert ag">✅ Gate assigned — timetable refreshed</div>
+    <div class="card"><div class="irow"><span>Flight</span><span id="ga-fl">—</span></div><div class="irow"><span>Gate</span><span id="ga-gate">—</span></div><div class="irow"><span>Status</span><span><span class="badge bg">Confirmed</span></span></div></div>
+    <button class="btn btn-p" onclick="go('s-ground')">Back to dashboard</button>
+  </div>
+</div>
+<div class="screen" id="s-aircraft">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-ground')">← Dashboard</button></div></nav>
+  <div class="page">
+    <div class="phdr"><span class="ptitle">Update aircraft status</span></div>
+    <div class="card">
+      <div class="fg"><label>Aircraft registration</label><input type="text" placeholder="EI-RJA"/></div>
+      <div class="fg"><label>Flight</label><input type="text" placeholder="AZ 204"/></div>
+      <div class="fg"><label>New status</label><select><option>En route</option><option>Approaching</option><option>Landed</option><option>Taxiing</option><option>At gate</option></select></div>
+      <div class="alert aa">⚠ This propagates to real-time feeds and notifies gate agents.</div>
+      <button class="btn btn-s btn-full" onclick="go('s-aircraft-done')">Confirm status update</button>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-aircraft-done">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn p" onclick="go('s-ground')">Dashboard</button></div></nav>
+  <div class="page"><div class="alert ag">✅ Status propagated — real-time feeds updated</div><button class="btn btn-p" onclick="go('s-ground')">Back</button></div>
+</div>
+<div class="screen" id="s-shifts">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-ground')">← Dashboard</button></div></nav>
+  <div class="page">
+    <div class="phdr"><span class="ptitle">Shift assignment</span></div>
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>Staff</th><th>Role</th><th>Shift</th><th>Zone</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>G. Bianchi</td><td>Gate Agent</td><td>06:00–14:00</td><td>B12</td><td><button class="fsel" onclick="showToast('Shift updated')">Edit</button></td></tr>
+          <tr><td>A. Ferretti</td><td>Ground Crew</td><td>07:00–15:00</td><td>Apron 3</td><td><button class="fsel" onclick="showToast('Shift updated')">Edit</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="ctitle">Add new shift</div>
+      <div class="r2">
+        <div class="fg"><label>Staff member</label><input type="text" placeholder="Full name"/></div>
+        <div class="fg"><label>Role</label><select><option>Gate Agent</option><option>Ground Crew</option><option>Check-in</option></select></div>
+      </div>
+      <div class="r2">
+        <div class="fg"><label>Start</label><input type="time" value="06:00"/></div>
+        <div class="fg"><label>End</label><input type="time" value="14:00"/></div>
+      </div>
+      <button class="btn btn-p" onclick="showToast('Shift assigned successfully')">Assign shift</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADMIN ══ -->
+<div class="screen" id="s-admin">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><span class="nav-role role-admin">Administrator</span><button class="nbtn red" onclick="logout()">Sign out</button></div></nav>
+  <div class="page">
+    <div class="phdr"><span class="ptitle">Admin Dashboard</span><span class="psub" id="admin-welcome">Primia Awal</span></div>
+    <div class="dgrid">
+      <div class="dcard" onclick="go('s-schedule')"><div class="dico">📅</div><p>Schedule management</p><p>Update delays & cancellations</p></div>
+      <div class="dcard" onclick="go('s-pricing')"><div class="dico">💰</div><p>Ticket pricing</p><p>Set fares by class and route</p></div>
+      <div class="dcard" onclick="go('s-cargo-pricing')"><div class="dico">📦</div><p>Cargo pricing</p><p>Update cargo rates per route</p></div>
+      <div class="dcard" onclick="go('s-crew')"><div class="dico">👨‍✈️</div><p>Assign crew</p><p>Assign pilots & cabin crew to flights</p></div>
+      <div class="dcard" onclick="go('s-workers')"><div class="dico">👤</div><p>Worker accounts</p><p>Create & manage staff accounts</p></div>
+      <div class="dcard" onclick="go('s-admin-support')"><div class="dico">🎧</div><p>Support queue</p><p>Handle escalated tickets</p></div>
+      <div class="dcard" onclick="go('s-admin-bugs')"><div class="dico">🐛</div><p>Bug reports</p><p>Review & archive reported bugs</p></div>
+      <div class="dcard" onclick="go('s-weather')"><div class="dico">🌤</div><p>Weather data</p><p>Monitor live airport conditions</p></div>
+    </div>
+    <div class="card">
+      <div class="irow"><span>Flights today</span><span>42</span></div>
+      <div class="irow"><span>Open support tickets</span><span>7</span></div>
+      <div class="irow"><span>Pending bug reports</span><span>3</span></div>
+      <div class="irow"><span>Active staff</span><span>28</span></div>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-schedule">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-admin')">← Admin</button></div></nav>
+  <div class="page">
+    <div class="phdr"><span class="ptitle">Schedule management</span></div>
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>Flight</th><th>Route</th><th>Departs</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>AZ 204</td><td>FCO→LHR</td><td>08:15</td><td><span class="badge bg">On time</span></td><td><button class="fsel" onclick="showSched()">Edit</button></td></tr>
+          <tr><td>FR 8821</td><td>FCO→BCN</td><td>13:15</td><td><span class="badge bg">On time</span></td><td><button class="fsel" onclick="showSched()">Edit</button></td></tr>
+          <tr><td>BA 564</td><td>FCO→JFK</td><td>14:45</td><td><span class="badge ba">Delayed</span></td><td><button class="fsel" onclick="showSched()">Edit</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card hidden" id="sched-form">
+      <div class="fg"><label>Action</label><select><option>Delay</option><option>Cancellation</option><option>Gate change</option></select></div>
+      <div class="fg"><label>New departure time</label><input type="time" value="09:30"/></div>
+      <div class="fg"><label>Reason</label><textarea placeholder="e.g. Crew delay, weather hold…"></textarea></div>
+      <button class="btn btn-p btn-full" onclick="go('s-schedule-done')">Update & sync</button>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-schedule-done">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn p" onclick="go('s-admin')">Admin</button></div></nav>
+  <div class="page"><div class="alert ag">✅ Schedule updated — external engine synced, passenger alerts sent.</div><button class="btn btn-p" onclick="go('s-admin')">Back to admin</button></div>
+</div>
+<div class="screen" id="s-pricing">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-admin')">← Admin</button></div></nav>
+  <div class="page"><div class="phdr"><span class="ptitle">Ticket pricing</span></div>
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>Flight</th><th>Economy</th><th>Business</th><th>First</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>AZ 204</td><td>€189</td><td>€420</td><td>€890</td><td><button class="fsel" onclick="showToast('Pricing updated')">Update</button></td></tr>
+          <tr><td>BA 564</td><td>€634</td><td>€1,200</td><td>€2,800</td><td><button class="fsel" onclick="showToast('Pricing updated')">Update</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-cargo-pricing">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-admin')">← Admin</button></div></nav>
+  <div class="page"><div class="phdr"><span class="ptitle">Cargo pricing</span></div>
+    <div class="card">
+      <div class="r2">
+        <div class="fg"><label>Route</label><select><option>FCO→LHR</option><option>FCO→JFK</option></select></div>
+        <div class="fg"><label>Rate (€/kg)</label><input type="number" value="3.20"/></div>
+      </div>
+      <button class="btn btn-p" onclick="showToast('Cargo pricing updated')">Save pricing</button>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-crew">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-admin')">← Admin</button></div></nav>
+  <div class="page"><div class="phdr"><span class="ptitle">Assign crew to flights</span></div>
+    <div class="card">
+      <div class="fg"><label>Flight</label><select><option>AZ 204 · FCO→LHR · 08:15</option><option>BA 564 · FCO→JFK · 14:45</option></select></div>
+      <table class="tbl" style="margin-top:8px">
+        <thead><tr><th>Name</th><th>Role</th><th>Cert.</th><th>Assign</th></tr></thead>
+        <tbody>
+          <tr><td>Capt. R. Conti</td><td>Pilot</td><td>A320</td><td><input type="checkbox"/></td></tr>
+          <tr><td>FO A. Esposito</td><td>Co-pilot</td><td>A320</td><td><input type="checkbox"/></td></tr>
+          <tr><td>S. Martini</td><td>Cabin crew</td><td>SEP</td><td><input type="checkbox"/></td></tr>
+        </tbody>
+      </table>
+      <button class="btn btn-p btn-full" style="margin-top:10px" onclick="showToast('Crew assigned to flight')">Confirm</button>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-workers">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-admin')">← Admin</button></div></nav>
+  <div class="page"><div class="phdr"><span class="ptitle">Worker accounts</span></div>
+    <div class="card" style="max-width:420px">
+      <div class="r2">
+        <div class="fg"><label>First name</label><input type="text" placeholder="Giovanni"/></div>
+        <div class="fg"><label>Last name</label><input type="text" placeholder="Bianchi"/></div>
+      </div>
+      <div class="fg"><label>Email</label><input type="email" placeholder="g.bianchi@airpal.com"/></div>
+      <div class="fg"><label>Role</label><select><option>Gate Agent</option><option>Ground Crew</option><option>Check-in Staff</option><option>Ground Manager</option><option>Administrator</option></select></div>
+      <button class="btn btn-p btn-full" onclick="go('s-workers-done')">Create account</button>
+    </div>
+    <div class="card">
+      <div class="ctitle">Existing workers</div>
+      <table class="tbl">
+        <thead><tr><th>Name</th><th>Role</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Luca Paloschi</td><td>Ground Manager</td><td><span class="badge bg">Active</span></td></tr>
+          <tr><td>G. Bianchi</td><td>Gate Agent</td><td><span class="badge bg">Active</span></td></tr>
+          <tr><td>F. Marino</td><td>Check-in</td><td><span class="badge ba">Inactive</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-workers-done">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn p" onclick="go('s-admin')">Admin</button></div></nav>
+  <div class="page"><div class="alert ag">✅ Worker account created — activation email sent. Account is inactive until confirmed.</div><button class="btn btn-p" onclick="go('s-admin')">Back to admin</button></div>
+</div>
+<div class="screen" id="s-admin-support">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-admin')">← Admin</button></div></nav>
+  <div class="page"><div class="phdr"><span class="ptitle">Support queue</span></div>
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>Ticket</th><th>Passenger</th><th>Issue</th><th>Priority</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>TKT-2201</td><td>T. Law</td><td>Missed connection</td><td><span class="badge br">Urgent</span></td><td><button class="fsel" onclick="showToast('Ticket resolved')">Resolve</button></td></tr>
+          <tr><td>TKT-2198</td><td>A. Fischer</td><td>Baggage missing</td><td><span class="badge ba">High</span></td><td><button class="fsel" onclick="showToast('Ticket resolved')">Resolve</button></td></tr>
+          <tr><td>TKT-2190</td><td>P. Dupont</td><td>Refund pending</td><td><span class="badge ba">High</span></td><td><button class="fsel" onclick="showToast('Ticket resolved')">Resolve</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-admin-bugs">
+  <nav class="nav"><span class="nav-logo">AirPal</span><div class="nav-links"><button class="nbtn" onclick="go('s-admin')">← Admin</button></div></nav>
+  <div class="page"><div class="phdr"><span class="ptitle">Bug reports</span></div>
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>ID</th><th>Summary</th><th>Severity</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>BUG-041</td><td>Search crash on mobile</td><td><span class="badge br">High</span></td><td>Open</td><td><button class="fsel" onclick="showToast('Bug archived')">Archive</button></td></tr>
+          <tr><td>BUG-038</td><td>Boarding pass blank page</td><td><span class="badge ba">Medium</span></td><td>Open</td><td><button class="fsel" onclick="showToast('Bug archived')">Archive</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="toast" style="position:fixed;bottom:20px;right:20px;background:#0a3d8f;color:#fff;border-radius:10px;padding:10px 18px;font-size:13px;box-shadow:0 4px 16px rgba(0,0,0,.2);display:none;z-index:9999;max-width:300px"></div>
+</div>
+
+<script>
+var role = 'guest';
+var currentUser = null;
+var prevScreen = 's-home';
+var gfFlight = '';
+var selFlight = {num:'AZ 204',route:'FCO→LHR',dep:'08:15',arr:'10:50',price:'€189'};
+
+var ACCOUNTS = {
+  't.law@airpal.com':       { password:'Law1234!',  role:'passenger', name:'Trafalgar Law' },
+  'l.paloschi@airpal.com':  { password:'Ground99#', role:'ground',    name:'Luca Paloschi' },
+  'p.awal@airpal.com':      { password:'Admin00@',  role:'admin',     name:'Primia Awal' }
+};
+
+function go(s){
+  prevScreen = document.querySelector('.screen.active')?.id || 's-home';
+  document.querySelectorAll('.screen').forEach(function(e){ e.classList.remove('active') });
+  var el = document.getElementById(s);
+  if(el) el.classList.add('active');
+  ['nav-results','nav-gates','nav-wx'].forEach(function(id){
+    var n = document.getElementById(id);
+    if(n) n.innerHTML = ctxNav();
+  });
+}
+
+function ctxNav(){
+  if(role==='passenger') return '<button class="nbtn p" onclick="go(\'s-dashboard\')">My Dashboard</button><button class="nbtn red" onclick="logout()">Sign out</button>';
+  if(role==='ground')    return '<button class="nbtn p" onclick="go(\'s-ground\')">Staff Area</button><button class="nbtn red" onclick="logout()">Sign out</button>';
+  if(role==='admin')     return '<button class="nbtn p" onclick="go(\'s-admin\')">Admin</button><button class="nbtn red" onclick="logout()">Sign out</button>';
+  return '<button class="nbtn" onclick="go(\'s-home\')">← Home</button><button class="nbtn p" onclick="go(\'s-login\')">Login</button>';
+}
+
+function goBack(){ go(prevScreen) }
+
+function fillAndLogin(email, password){
+  document.getElementById('lem').value = email;
+  document.getElementById('lpw').value = password;
+  document.getElementById('login-err').classList.add('hidden');
+  showToast('Filling in credentials…');
+  setTimeout(doEmailLogin, 700);
+}
+
+function doEmailLogin(){
+  var email = document.getElementById('lem').value.trim().toLowerCase();
+  var pw    = document.getElementById('lpw').value;
+  var eb    = document.getElementById('login-err');
+  eb.classList.add('hidden');
+  if(!email || !pw){
+    eb.textContent = 'Please enter your email and password.';
+    eb.classList.remove('hidden'); return;
+  }
+  var acct = ACCOUNTS[email];
+  if(!acct || acct.password !== pw){
+    eb.textContent = 'Incorrect email or password.';
+    eb.classList.remove('hidden'); return;
+  }
+  role = acct.role;
+  currentUser = acct;
+  applyUserContext();
+  showToast('Welcome, ' + acct.name.split(' ')[0] + '!');
+  if(role==='passenger') go('s-dashboard');
+  else if(role==='ground') go('s-ground');
+  else if(role==='admin') go('s-admin');
+}
+
+function doRegister(){
+  var fn = document.getElementById('rfn').value.trim();
+  var ln = document.getElementById('rln').value.trim();
+  var em = document.getElementById('rem').value.trim();
+  var pw = document.getElementById('rpw').value;
+  var eb = document.getElementById('reg-err');
+  eb.classList.add('hidden');
+  if(!fn||!ln||!em||!pw){ eb.textContent='Please fill all required fields.'; eb.classList.remove('hidden'); return; }
+  if(pw.length<8){ eb.textContent='Password must be at least 8 characters.'; eb.classList.remove('hidden'); return; }
+  role = 'passenger';
+  currentUser = { name: fn+' '+ln, role:'passenger' };
+  applyUserContext();
+  showToast('Account created! Welcome to AirPal.');
+  go('s-dashboard');
+}
+
+function applyUserContext(){
+  if(!currentUser) return;
+  var fn = currentUser.name.split(' ')[0];
+  var dw = document.getElementById('dash-welcome');
+  var gw = document.getElementById('ground-welcome');
+  var aw = document.getElementById('admin-welcome');
+  if(dw) dw.textContent = 'Welcome back, ' + fn;
+  if(gw) gw.textContent = currentUser.name;
+  if(aw) aw.textContent = currentUser.name;
+  var nh = document.getElementById('nav-home');
+  if(nh && role !== 'guest'){
+    nh.innerHTML = '<span class="nav-role role-'+role+'">'+currentUser.name+'</span><button class="nbtn red" onclick="logout()">Sign out</button>';
+  }
+}
+
+function logout(){
+  role = 'guest'; currentUser = null;
+  document.getElementById('lem').value = '';
+  document.getElementById('lpw').value = '';
+  var nh = document.getElementById('nav-home');
+  if(nh) nh.innerHTML = '<button class="nbtn" onclick="go(\'s-gates\')">🚪 Gate finder</button><button class="nbtn" onclick="go(\'s-weather\')">🌤 Weather</button><button class="nbtn p" onclick="go(\'s-login\')">Login / Register</button>';
+  go('s-home');
+}
+
+function pickFlight(el,num,route,dep,arr,info,price){
+  document.querySelectorAll('.fc').forEach(function(c){ c.classList.remove('sel') });
+  el.classList.add('sel');
+  selFlight = {num:num,route:route,dep:dep,arr:arr,price:price};
+  if(role !== 'passenger'){
+    showToast('Please log in as a passenger to book.');
+    setTimeout(function(){ go('s-login') }, 1400); return;
+  }
+  document.getElementById('b-flight').textContent = num;
+  document.getElementById('b-route').textContent  = route;
+  document.getElementById('b-dep').textContent    = dep;
+  document.getElementById('b-arr').textContent    = arr;
+  var base = parseInt(price.replace(/[^0-9]/g,''));
+  document.getElementById('b-base').textContent  = price;
+  document.getElementById('b-total').textContent = '€'+(base+28);
+  setTimeout(function(){ go('s-book') }, 250);
+}
+
+function doPay(){
+  var cn  = document.getElementById('cn').value.trim();
+  var num = document.getElementById('cnum').value.replace(/\s/g,'');
+  if(!cn||!num){ showToast('Please fill in your card details.'); return; }
+  if(num.endsWith('0000')){ go('s-book-fail'); return; }
+  document.getElementById('bref').textContent  = 'AP-'+Math.floor(700000+Math.random()*99999);
+  document.getElementById('bconf').textContent = selFlight.num+' · '+selFlight.route;
+  go('s-book-ok');
+}
+
+function doCheckin(){
+  var fn  = document.getElementById('ci-fn').value.trim();
+  var ln  = document.getElementById('ci-ln').value.trim();
+  var doc = document.getElementById('ci-doc').value.trim();
+  if(!fn||!ln||!doc){ showToast('Please fill all fields.'); return; }
+  document.getElementById('bp-name').textContent = fn+' '+ln;
+  var bc = document.getElementById('bcode'); bc.innerHTML='';
+  [28,14,36,20,42,10,32,16,38,24,12,44,18,30].forEach(function(h){
+    var b=document.createElement('div'); b.className='bbar'; b.style.cssText='width:2px;height:'+h+'px'; bc.appendChild(b);
+  });
+  go('s-bp');
+}
+
+function doReport(msg){ document.getElementById('report-msg').textContent='✅ '+msg; go('s-report-done'); }
+function showGateForm(f){ gfFlight=f; document.getElementById('gf-flight').textContent=f; document.getElementById('gate-form').classList.remove('hidden'); }
+function doAssignGate(){
+  var pk=document.getElementById('gate-pick');
+  if(pk.options[pk.selectedIndex].value==='conflict'){ go('s-gate-conflict'); return; }
+  var gname=pk.options[pk.selectedIndex].text.split(' — ')[0];
+  document.getElementById('ga-fl').textContent=gfFlight;
+  document.getElementById('ga-gate').textContent=gname;
+  go('s-gate-ok');
+}
+function showSched(){ document.getElementById('sched-form').classList.remove('hidden'); }
+function showToast(msg){
+  var t=document.getElementById('toast'); t.textContent=msg; t.style.display='block';
+  clearTimeout(t._t); t._t=setTimeout(function(){ t.style.display='none'; },3000);
+}
+</script>
+</body>
+</html>
